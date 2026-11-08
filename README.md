@@ -12,10 +12,8 @@ Bed leveling made easy for the **Creality Ender-3 V2 Neo** (V4.2.2 board, CR Tou
 
 - **Bed Tramming:** probes the four corners and tells you **one knob at a time**: which one, which way and how many degrees. Repeat until all four are green.
 - **Auto Mesh 5×5:** watch the mesh fill in live. It's saved automatically. **View Mesh** shows it any time.
-- **Heat bed first:** optional, so you level the bed at printing temperature.
 - **Paper Leveling:** moves the nozzle over each knob for the paper test.
 - **Probe Accuracy Test:** checks your CR Touch.
-- **Newest file on top**, a **"Print this file?"** confirmation, and a clean print-finished screen.
 
 ## How to install
 
@@ -30,13 +28,18 @@ Follow MRiscoC's guide to find out which screen you have and to update it: **[Ho
 2. Copy it to a FAT32 microSD card (32 GB or less) and **rename it** to a name you haven't flashed before.
 3. With the printer off, insert the card and turn it on. After 10–30 seconds the screen shows **JNPCREATES**.
 
-### 3. Set up
+Everything should be the same setup except for the leveling option, which adds more features
 
-1. **Control → Restore Settings**, then set your **Z offset** (Prepare → Z-Offset) and, if you changed extruders, your **E-steps** (default 93).
-2. **Control → Store Settings.**
-3. **Leveling → Bed Tramming**, then **Leveling → Auto Mesh**.
+Make sure to backup or note down your Z-offset, E-steps, and Homing Offsets.
+Run Tramming guide and then run automesh to save the bed mesh into your system.
+
+
+
 
 ## Credits
 
-Built on [Marlin](https://github.com/MarlinFirmware/Marlin). Inspired by MRiscoC's Professional Firmware.
+Built on [Marlin](https://github.com/MarlinFirmware/Marlin). 
+Inspired by MRiscoC's Professional Firmware. https://github.com/mriscoc/Ender3V2S1
+I would recommend checking this github repo out first, there are multiple videos out there showing the setup process and it has way more features.
+I just wanted a quick tramming setup and this works well for my use case.
 Source changes: [`JNPCREATES-Marlin-2.1.2.9.patch`](JNPCREATES-Marlin-2.1.2.9.patch). License: GPL-3.0 ([LICENSE](LICENSE)).
