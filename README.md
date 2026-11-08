@@ -39,7 +39,7 @@ Run Tramming guide and then run automesh to save the bed mesh into your system.
 ## Credits
 
 Built on [Marlin](https://github.com/MarlinFirmware/Marlin). 
-Inspired by MRiscoC's Professional Firmware. https://github.com/mriscoc/Ender3V2S1
-I would recommend checking this github repo out first, there are multiple videos out there showing the setup process and it has way more features.
-I just wanted a quick tramming setup and this works well for my use case.
+Inspired by MRiscoC's Professional Firmware. https://github.com/mriscoc/Ender3V2S1 \
+I would recommend checking this github repo out first, there are multiple videos out there showing the setup process and it has way more features.\
+I just wanted a quick tramming setup and this works well for my use case.\
 Source changes: [`JNPCREATES-Marlin-2.1.2.9.patch`](JNPCREATES-Marlin-2.1.2.9.patch). License: GPL-3.0 ([LICENSE](LICENSE)).
