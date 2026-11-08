@@ -1,0 +1,2754 @@
+diff --git a/Marlin/Configuration.h b/Marlin/Configuration.h
+index 07488d3..37a2bd5 100644
+--- a/Marlin/Configuration.h
++++ b/Marlin/Configuration.h
+@@ -1,6 +1,6 @@
+ /**
+  * Marlin 3D Printer Firmware
+- * Copyright (c) 2020 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
++ * Copyright (c) 2022 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+  *
+  * Based on Sprinter and grbl.
+  * Copyright (c) 2011 Camiel Gubbels / Erik van der Zalm
+@@ -21,6 +21,8 @@
+  */
+ #pragma once
+ 
++#define CONFIG_EXAMPLES_DIR "Creality/Ender-3 V2 Neo"
++
+ /**
+  * Configuration.h
+  *
+@@ -88,7 +90,8 @@
+ 
+ // Choose the name from boards.h that matches your setup
+ #ifndef MOTHERBOARD
+-  #define MOTHERBOARD BOARD_RAMPS_14_EFB
++  #define MOTHERBOARD BOARD_CREALITY_V4
++  #define NO_AUTO_ASSIGN_WARNING
+ #endif
+ 
+ // @section serial
+@@ -101,7 +104,7 @@
+  *
+  * :[-1, 0, 1, 2, 3, 4, 5, 6, 7]
+  */
+-#define SERIAL_PORT 0
++#define SERIAL_PORT 1
+ 
+ /**
+  * Serial Port Baud Rate
+@@ -114,7 +117,7 @@
+  *
+  * :[2400, 9600, 19200, 38400, 57600, 115200, 250000, 500000, 1000000]
+  */
+-#define BAUDRATE 250000
++#define BAUDRATE 115200
+ 
+ //#define BAUD_RATE_GCODE     // Enable G-code M575 to set the baud rate
+ 
+@@ -138,7 +141,7 @@
+ //#define BLUETOOTH
+ 
+ // Name displayed in the LCD "Ready" message and Info menu
+-//#define CUSTOM_MACHINE_NAME "3D Printer"
++#define CUSTOM_MACHINE_NAME "Ender-3 V2 Neo"
+ 
+ // Printer's unique ID, used by some programs to differentiate between machines.
+ // Choose your own or use a service like https://www.uuidgenerator.net/version4
+@@ -161,9 +164,9 @@
+  *          TMC5130, TMC5130_STANDALONE, TMC5160, TMC5160_STANDALONE
+  * :['A4988', 'A5984', 'DRV8825', 'LV8729', 'TB6560', 'TB6600', 'TMC2100', 'TMC2130', 'TMC2130_STANDALONE', 'TMC2160', 'TMC2160_STANDALONE', 'TMC2208', 'TMC2208_STANDALONE', 'TMC2209', 'TMC2209_STANDALONE', 'TMC26X', 'TMC26X_STANDALONE', 'TMC2660', 'TMC2660_STANDALONE', 'TMC5130', 'TMC5130_STANDALONE', 'TMC5160', 'TMC5160_STANDALONE']
+  */
+-#define X_DRIVER_TYPE  A4988
+-#define Y_DRIVER_TYPE  A4988
+-#define Z_DRIVER_TYPE  A4988
++#define X_DRIVER_TYPE TMC2208_STANDALONE
++#define Y_DRIVER_TYPE TMC2208_STANDALONE
++#define Z_DRIVER_TYPE TMC2208_STANDALONE
+ //#define X2_DRIVER_TYPE A4988
+ //#define Y2_DRIVER_TYPE A4988
+ //#define Z2_DRIVER_TYPE A4988
+@@ -175,7 +178,7 @@
+ //#define U_DRIVER_TYPE  A4988
+ //#define V_DRIVER_TYPE  A4988
+ //#define W_DRIVER_TYPE  A4988
+-#define E0_DRIVER_TYPE A4988
++#define E0_DRIVER_TYPE TMC2208_STANDALONE
+ //#define E1_DRIVER_TYPE A4988
+ //#define E2_DRIVER_TYPE A4988
+ //#define E3_DRIVER_TYPE A4988
+@@ -620,7 +623,7 @@
+ 
+ // Below this temperature the heater will be switched off
+ // because it probably indicates a broken thermistor wire.
+-#define HEATER_0_MINTEMP   5
++#define HEATER_0_MINTEMP   0
+ #define HEATER_1_MINTEMP   5
+ #define HEATER_2_MINTEMP   5
+ #define HEATER_3_MINTEMP   5
+@@ -628,7 +631,7 @@
+ #define HEATER_5_MINTEMP   5
+ #define HEATER_6_MINTEMP   5
+ #define HEATER_7_MINTEMP   5
+-#define BED_MINTEMP        5
++#define BED_MINTEMP        0
+ #define CHAMBER_MINTEMP    5
+ 
+ // Above this temperature the heater will be switched off.
+@@ -642,7 +645,7 @@
+ #define HEATER_5_MAXTEMP 275
+ #define HEATER_6_MAXTEMP 275
+ #define HEATER_7_MAXTEMP 275
+-#define BED_MAXTEMP      150
++#define BED_MAXTEMP      120
+ #define CHAMBER_MAXTEMP  60
+ 
+ /**
+@@ -682,13 +685,13 @@
+   #if ENABLED(PID_PARAMS_PER_HOTEND)
+     // Specify up to one value per hotend here, according to your setup.
+     // If there are fewer values, the last one applies to the remaining hotends.
+-    #define DEFAULT_KP_LIST {  22.20,  22.20 }
+-    #define DEFAULT_KI_LIST {   1.08,   1.08 }
+-    #define DEFAULT_KD_LIST { 114.00, 114.00 }
++    #define DEFAULT_KP_LIST {  28.72,  28.72 }
++    #define DEFAULT_KI_LIST {   2.62,   2.62 }
++    #define DEFAULT_KD_LIST {  78.81,  78.81 }
+   #else
+-    #define DEFAULT_KP  22.20
+-    #define DEFAULT_KI   1.08
+-    #define DEFAULT_KD 114.00
++    #define DEFAULT_KP  28.72
++    #define DEFAULT_KI   2.62
++    #define DEFAULT_KD  78.81
+   #endif
+ #else
+   #define BANG_MAX 255    // Limit hotend current while in bang-bang mode; 255=full current
+@@ -767,7 +770,7 @@
+  *
+  * With this option disabled, bang-bang will be used. BED_LIMIT_SWITCHING enables hysteresis.
+  */
+-//#define PIDTEMPBED
++#define PIDTEMPBED
+ 
+ #if ENABLED(PIDTEMPBED)
+   //#define MIN_BED_POWER 0
+@@ -775,9 +778,9 @@
+ 
+   // 120V 250W silicone heater into 4mm borosilicate (MendelMax 1.5+)
+   // from FOPDT model - kp=.39 Tp=405 Tdead=66, Tc set to 79.2, aggressive factor of .15 (vs .1, 1, 10)
+-  #define DEFAULT_BED_KP 10.00
+-  #define DEFAULT_BED_KI .023
+-  #define DEFAULT_BED_KD 305.4
++  #define DEFAULT_BED_KP 462.10
++  #define DEFAULT_BED_KI  85.47
++  #define DEFAULT_BED_KD 624.59
+ 
+   // FIND YOUR OWN: "M303 E-1 C8 S90" to run autotune on the bed at 90 degreesC for 8 cycles.
+ #else
+@@ -851,14 +854,14 @@
+  * *** IT IS HIGHLY RECOMMENDED TO LEAVE THIS OPTION ENABLED! ***
+  */
+ #define PREVENT_COLD_EXTRUSION
+-#define EXTRUDE_MINTEMP 170
++#define EXTRUDE_MINTEMP 180
+ 
+ /**
+  * Prevent a single extrusion longer than EXTRUDE_MAXLENGTH.
+  * Note: For Bowden Extruders make this large enough to allow load/unload.
+  */
+ #define PREVENT_LENGTHY_EXTRUDE
+-#define EXTRUDE_MAXLENGTH 200
++#define EXTRUDE_MAXLENGTH 1000
+ 
+ //===========================================================================
+ //======================== Thermal Runaway Protection =======================
+@@ -1152,7 +1155,7 @@
+ 
+ // Enable this feature if all enabled endstop pins are interrupt-capable.
+ // This will remove the need to poll the interrupt pins, saving many CPU cycles.
+-//#define ENDSTOP_INTERRUPTS_FEATURE
++#define ENDSTOP_INTERRUPTS_FEATURE
+ 
+ /**
+  * Endstop Noise Threshold
+@@ -1196,14 +1199,14 @@
+  * Override with M92
+  *                                      X, Y, Z [, I [, J [, K...]]], E0 [, E1[, E2...]]
+  */
+-#define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 400, 500 }
++#define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 400, 93 }  // Stock Neo extruder. Set yours in Control > Motion > Steps, then Store Settings
+ 
+ /**
+  * Default Max Feed Rate (linear=mm/s, rotational=°/s)
+  * Override with M203
+  *                                      X, Y, Z [, I [, J [, K...]]], E0 [, E1[, E2...]]
+  */
+-#define DEFAULT_MAX_FEEDRATE          { 300, 300, 5, 25 }
++#define DEFAULT_MAX_FEEDRATE          { 500, 500, 10, 25 }  // JNP: faster probing/homing
+ 
+ //#define LIMITED_MAX_FR_EDITING        // Limit edit via M203 or LCD to DEFAULT_MAX_FEEDRATE * 2
+ #if ENABLED(LIMITED_MAX_FR_EDITING)
+@@ -1216,7 +1219,7 @@
+  * Override with M201
+  *                                      X, Y, Z [, I [, J [, K...]]], E0 [, E1[, E2...]]
+  */
+-#define DEFAULT_MAX_ACCELERATION      { 3000, 3000, 100, 10000 }
++#define DEFAULT_MAX_ACCELERATION      { 500, 500, 100, 1000 }
+ 
+ //#define LIMITED_MAX_ACCEL_EDITING     // Limit edit via M201 or LCD to DEFAULT_MAX_ACCELERATION * 2
+ #if ENABLED(LIMITED_MAX_ACCEL_EDITING)
+@@ -1231,9 +1234,9 @@
+  *   M204 R    Retract Acceleration
+  *   M204 T    Travel Acceleration
+  */
+-#define DEFAULT_ACCELERATION          3000    // X, Y, Z and E acceleration for printing moves
+-#define DEFAULT_RETRACT_ACCELERATION  3000    // E acceleration for retracts
+-#define DEFAULT_TRAVEL_ACCELERATION   3000    // X, Y, Z acceleration for travel (non printing) moves
++#define DEFAULT_ACCELERATION           500    // X, Y, Z and E acceleration for printing moves
++#define DEFAULT_RETRACT_ACCELERATION   500    // E acceleration for retracts
++#define DEFAULT_TRAVEL_ACCELERATION   1000    // X, Y, Z acceleration for travel (non printing) moves
+ 
+ /**
+  * Default Jerk limits (mm/s)
+@@ -1243,7 +1246,7 @@
+  * When changing speed and direction, if the difference is less than the
+  * value set here, it may happen instantaneously.
+  */
+-//#define CLASSIC_JERK
++#define CLASSIC_JERK
+ #if ENABLED(CLASSIC_JERK)
+   #define DEFAULT_XJERK 10.0
+   #define DEFAULT_YJERK 10.0
+@@ -1302,10 +1305,10 @@
+  * The probe replaces the Z-MIN endstop and is used for Z homing.
+  * (Automatically enables USE_PROBE_FOR_Z_HOMING.)
+  */
+-#define Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN
++//#define Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN
+ 
+ // Force the use of the probe for Z-axis homing
+-//#define USE_PROBE_FOR_Z_HOMING
++#define USE_PROBE_FOR_Z_HOMING
+ 
+ /**
+  * Z_MIN_PROBE_PIN
+@@ -1359,7 +1362,7 @@
+ /**
+  * The BLTouch probe uses a Hall effect sensor and emulates a servo.
+  */
+-//#define BLTOUCH
++#define BLTOUCH
+ 
+ /**
+  * MagLev V4 probe by MDD
+@@ -1511,17 +1514,26 @@
+  *     |    [-]    |
+  *     O-- FRONT --+
+  */
+-#define NOZZLE_TO_PROBE_OFFSET { 10, 10, 0 }
++#define NOZZLE_TO_PROBE_OFFSET { -39, -12, 0 }  // Stock. Set your Z offset (paper test), then Store Settings
+ 
+ // Most probes should stay away from the edges of the bed, but
+ // with NOZZLE_AS_PROBE this can be negative for a wider probing area.
+ #define PROBING_MARGIN 10
++// JNP: probe area centered on the plate. Owner measured the plate edges at
++// nozzle X=3 and X=237 -> plate center X=120. Right edge is the probe's reach
++// limit (X_BED_SIZE 235 - 30 = 205; nozzle 205+39 = 244 = X_MAX_POS), so the left
++// edge is the mirror image: 35 (32 mm in from each plate edge).
++// Y: 25..205 (Y_BED_SIZE 220 - 15 = 205), pending a Y edge measurement.
++#define PROBING_MARGIN_LEFT  35
++#define PROBING_MARGIN_RIGHT 30
++#define PROBING_MARGIN_FRONT 25
++#define PROBING_MARGIN_BACK  15
+ 
+ // X and Y axis travel speed (mm/min) between probes
+-#define XY_PROBE_FEEDRATE (133*60)
++#define XY_PROBE_FEEDRATE (200*60)  // JNP: faster probing/homing
+ 
+ // Feedrate (mm/min) for the first approach when double-probing (MULTIPLE_PROBING == 2)
+-#define Z_PROBE_FEEDRATE_FAST (4*60)
++#define Z_PROBE_FEEDRATE_FAST (16*60)  // JNP: faster probing/homing
+ 
+ // Feedrate (mm/min) for the "accurate" probe of each point
+ #define Z_PROBE_FEEDRATE_SLOW (Z_PROBE_FEEDRATE_FAST / 2)
+@@ -1588,7 +1600,7 @@
+  * Example: 'M851 Z-5' with a CLEARANCE of 4  =>  9mm from bed to nozzle.
+  *     But: 'M851 Z+1' with a CLEARANCE of 2  =>  2mm from bed to nozzle.
+  */
+-#define Z_CLEARANCE_DEPLOY_PROBE   10 // (mm) Z Clearance for Deploy/Stow
++#define Z_CLEARANCE_DEPLOY_PROBE    5  // JNP: faster probing/homing // (mm) Z Clearance for Deploy/Stow
+ #define Z_CLEARANCE_BETWEEN_PROBES  5 // (mm) Z Clearance between probe points
+ #define Z_CLEARANCE_MULTI_PROBE     5 // (mm) Z Clearance between multiple probes
+ //#define Z_AFTER_PROBING           5 // (mm) Z position after probing is done
+@@ -1596,11 +1608,11 @@
+ #define Z_PROBE_LOW_POINT          -2 // (mm) Farthest distance below the trigger-point to go before stopping
+ 
+ // For M851 give a range for adjusting the Z probe offset
+-#define Z_PROBE_OFFSET_RANGE_MIN -20
+-#define Z_PROBE_OFFSET_RANGE_MAX 20
++#define Z_PROBE_OFFSET_RANGE_MIN -10
++#define Z_PROBE_OFFSET_RANGE_MAX 10
+ 
+ // Enable the M48 repeatability test to test probe accuracy
+-//#define Z_MIN_PROBE_REPEATABILITY_TEST
++#define Z_MIN_PROBE_REPEATABILITY_TEST  // JNP: M48, used by Leveling > Probe Accuracy Test
+ 
+ // Before deploy/stow pause for user confirmation
+ //#define PAUSE_BEFORE_DEPLOY_STOW
+@@ -1623,7 +1635,7 @@
+ //#define PROBING_FANS_OFF          // Turn fans off when probing
+ //#define PROBING_ESTEPPERS_OFF     // Turn all extruder steppers off when probing
+ //#define PROBING_STEPPERS_OFF      // Turn all steppers off (unless needed to hold position) when probing (including extruders)
+-//#define DELAY_BEFORE_PROBING 200  // (ms) To prevent vibrations from triggering piezo sensors
++#define DELAY_BEFORE_PROBING 200  // JNP: settle after fast moves  // (ms) To prevent vibrations from triggering piezo sensors
+ 
+ // Require minimum nozzle and/or bed temperature for probing
+ //#define PREHEAT_BEFORE_PROBING
+@@ -1671,8 +1683,8 @@
+ 
+ // Invert the stepper direction. Change (or reverse the motor connector) if an axis goes the wrong way.
+ #define INVERT_X_DIR false
+-#define INVERT_Y_DIR true
+-#define INVERT_Z_DIR false
++#define INVERT_Y_DIR false
++#define INVERT_Z_DIR true
+ //#define INVERT_I_DIR false
+ //#define INVERT_J_DIR false
+ //#define INVERT_K_DIR false
+@@ -1724,16 +1736,16 @@
+ // @section geometry
+ 
+ // The size of the printable area
+-#define X_BED_SIZE 200
+-#define Y_BED_SIZE 200
++#define X_BED_SIZE 235
++#define Y_BED_SIZE 220  // JNP: Creality printable area; must not exceed Y_MAX_POS
+ 
+ // Travel limits (linear=mm, rotational=°) after homing, corresponding to endstop positions.
+ #define X_MIN_POS 0
+ #define Y_MIN_POS 0
+ #define Z_MIN_POS 0
+-#define X_MAX_POS X_BED_SIZE
+-#define Y_MAX_POS Y_BED_SIZE
+-#define Z_MAX_POS 200
++#define X_MAX_POS 244  // JNP: measured on this printer (X hits the frame ~245); 248 slammed
++#define Y_MAX_POS 225  // JNP: measured on this printer (235 stalled the Y motor)
++#define Z_MAX_POS 250
+ //#define I_MIN_POS 0
+ //#define I_MAX_POS 50
+ //#define J_MIN_POS 0
+@@ -1905,7 +1917,7 @@
+  */
+ //#define AUTO_BED_LEVELING_3POINT
+ //#define AUTO_BED_LEVELING_LINEAR
+-//#define AUTO_BED_LEVELING_BILINEAR
++#define AUTO_BED_LEVELING_BILINEAR
+ //#define AUTO_BED_LEVELING_UBL
+ //#define MESH_BED_LEVELING
+ 
+@@ -1921,7 +1933,7 @@
+  * leveling immediately after G28.
+  */
+ //#define RESTORE_LEVELING_AFTER_G28
+-//#define ENABLE_LEVELING_AFTER_G28
++#define ENABLE_LEVELING_AFTER_G28  // JNP: ABL does not save "mesh on" in EEPROM, so turn a valid saved mesh on after every G28
+ 
+ /**
+  * Auto-leveling needs preheating
+@@ -1991,7 +2003,7 @@
+ #if EITHER(AUTO_BED_LEVELING_LINEAR, AUTO_BED_LEVELING_BILINEAR)
+ 
+   // Set the number of grid points per dimension.
+-  #define GRID_MAX_POINTS_X 3
++  #define GRID_MAX_POINTS_X 5  // JNP: 5x5 mesh (was 3)
+   #define GRID_MAX_POINTS_Y GRID_MAX_POINTS_X
+ 
+   // Probe along the Y axis, advancing X after each column
+@@ -2001,7 +2013,7 @@
+ 
+     // Beyond the probed grid, continue the implied tilt?
+     // Default is to maintain the height of the nearest edge.
+-    //#define EXTRAPOLATE_BEYOND_GRID
++    #define EXTRAPOLATE_BEYOND_GRID
+ 
+     //
+     // Subdivision of the grid by Catmull-Rom method.
+@@ -2122,15 +2134,15 @@
+  * - Allows Z homing only when XY positions are known and trusted.
+  * - If stepper drivers sleep, XY homing may be required again before Z homing.
+  */
+-//#define Z_SAFE_HOMING
++#define Z_SAFE_HOMING
+ 
+ #if ENABLED(Z_SAFE_HOMING)
+-  #define Z_SAFE_HOMING_X_POINT X_CENTER  // (mm) X point for Z homing
+-  #define Z_SAFE_HOMING_Y_POINT Y_CENTER  // (mm) Y point for Z homing
++  #define Z_SAFE_HOMING_X_POINT 120  // JNP: measured plate center (edges at X=3 and X=237)
++  #define Z_SAFE_HOMING_Y_POINT 115  // JNP: middle of the Y probe area (25..205)
+ #endif
+ 
+ // Homing speeds (linear=mm/min, rotational=°/min)
+-#define HOMING_FEEDRATE_MM_M { (50*60), (50*60), (4*60) }
++#define HOMING_FEEDRATE_MM_M { (50*60), (50*60), (10*60) }  // JNP: faster probing/homing
+ 
+ // Validate that endstops are triggered on homing moves
+ #define VALIDATE_HOMING_ENDSTOPS
+@@ -2208,13 +2220,13 @@
+  *   M501 - Read settings from EEPROM. (i.e., Throw away unsaved changes)
+  *   M502 - Revert settings to "factory" defaults. (Follow with M500 to init the EEPROM.)
+  */
+-//#define EEPROM_SETTINGS     // Persistent storage with M500 and M501
++#define EEPROM_SETTINGS       // Persistent storage with M500 and M501
+ //#define DISABLE_M503        // Saves ~2700 bytes of flash. Disable for release!
+-#define EEPROM_CHITCHAT       // Give feedback on EEPROM commands. Disable to save flash.
++//#define EEPROM_CHITCHAT     // Give feedback on EEPROM commands. Disable to save flash.
+ #define EEPROM_BOOT_SILENT    // Keep M503 quiet and only give errors during first load
+ #if ENABLED(EEPROM_SETTINGS)
+-  //#define EEPROM_AUTO_INIT  // Init EEPROM automatically on any errors.
+-  //#define EEPROM_INIT_NOW   // Init EEPROM on first boot after a new build.
++  #define EEPROM_AUTO_INIT    // Init EEPROM automatically on any errors.
++  #define EEPROM_INIT_NOW     // Init EEPROM on first boot after a new build.
+ #endif
+ 
+ // @section host
+@@ -2247,16 +2259,16 @@
+ // Preheat Constants - Up to 10 are supported without changes
+ //
+ #define PREHEAT_1_LABEL       "PLA"
+-#define PREHEAT_1_TEMP_HOTEND 180
+-#define PREHEAT_1_TEMP_BED     70
++#define PREHEAT_1_TEMP_HOTEND 185
++#define PREHEAT_1_TEMP_BED     60  // JNP: PLA bed; also used by Leveling > Heat bed first
+ #define PREHEAT_1_TEMP_CHAMBER 35
+-#define PREHEAT_1_FAN_SPEED     0 // Value from 0 to 255
++#define PREHEAT_1_FAN_SPEED   255 // Value from 0 to 255
+ 
+ #define PREHEAT_2_LABEL       "ABS"
+ #define PREHEAT_2_TEMP_HOTEND 240
+-#define PREHEAT_2_TEMP_BED    110
++#define PREHEAT_2_TEMP_BED     70
+ #define PREHEAT_2_TEMP_CHAMBER 35
+-#define PREHEAT_2_FAN_SPEED     0 // Value from 0 to 255
++#define PREHEAT_2_FAN_SPEED   255 // Value from 0 to 255
+ 
+ /**
+  * @section nozzle park
+@@ -2494,7 +2506,7 @@
+  * SD Card support is disabled by default. If your controller has an SD slot,
+  * you must uncomment the following option or it won't work.
+  */
+-//#define SDSUPPORT
++#define SDSUPPORT
+ 
+ /**
+  * SD CARD: ENABLE CRC
+@@ -2518,13 +2530,13 @@
+ // This option overrides the default number of encoder pulses needed to
+ // produce one step. Should be increased for high-resolution encoders.
+ //
+-//#define ENCODER_PULSES_PER_STEP 4
++#define ENCODER_PULSES_PER_STEP 4
+ 
+ //
+ // Use this option to override the number of step signals required to
+ // move between next/prev menu items.
+ //
+-//#define ENCODER_STEPS_PER_MENU_ITEM 1
++#define ENCODER_STEPS_PER_MENU_ITEM 1
+ 
+ /**
+  * Encoder Direction Options
+@@ -2592,8 +2604,8 @@
+ // Note: Test audio output with the G-Code:
+ //  M300 S<frequency Hz> P<duration ms>
+ //
+-//#define LCD_FEEDBACK_FREQUENCY_DURATION_MS 2
+-//#define LCD_FEEDBACK_FREQUENCY_HZ 5000
++#define LCD_FEEDBACK_FREQUENCY_DURATION_MS 2
++#define LCD_FEEDBACK_FREQUENCY_HZ 5000
+ 
+ //=============================================================================
+ //======================== LCD / Controller Selection =========================
+@@ -3202,7 +3214,7 @@
+ //
+ // Ender-3 v2 OEM display. A DWIN display with Rotary Encoder.
+ //
+-//#define DWIN_CREALITY_LCD           // Creality UI
++#define DWIN_CREALITY_LCD             // Creality UI
+ //#define DWIN_LCD_PROUI              // Pro UI by MRiscoC
+ //#define DWIN_CREALITY_LCD_JYERSUI   // Jyers UI by Jacob Myers
+ //#define DWIN_MARLINUI_PORTRAIT      // MarlinUI (portrait orientation)
+@@ -3261,7 +3273,7 @@
+ // Use software PWM to drive the fan, as for the heaters. This uses a very low frequency
+ // which is not as annoying as with the hardware PWM. On the other hand, if this frequency
+ // is too low, you should also increment SOFT_PWM_SCALE.
+-//#define FAN_SOFT_PWM
++#define FAN_SOFT_PWM
+ 
+ // Incrementing this by 1 will double the software PWM frequency,
+ // affecting heaters, and the fan if FAN_SOFT_PWM is enabled.
+diff --git a/Marlin/Configuration_adv.h b/Marlin/Configuration_adv.h
+index e046e23..29208b3 100644
+--- a/Marlin/Configuration_adv.h
++++ b/Marlin/Configuration_adv.h
+@@ -1,6 +1,6 @@
+ /**
+  * Marlin 3D Printer Firmware
+- * Copyright (c) 2020 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
++ * Copyright (c) 2022 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+  *
+  * Based on Sprinter and grbl.
+  * Copyright (c) 2011 Camiel Gubbels / Erik van der Zalm
+@@ -21,6 +21,8 @@
+  */
+ #pragma once
+ 
++#define CONFIG_EXAMPLES_DIR "Creality/Ender-3 V2 Neo"
++
+ /**
+  * Configuration_adv.h
+  *
+@@ -32,6 +34,9 @@
+  */
+ #define CONFIGURATION_ADV_H_VERSION 02010206
+ 
++// Project customizations are isolated from the official Neo baseline.
++#include "SmartTramming.h"
++
+ // @section develop
+ 
+ /**
+@@ -48,7 +53,7 @@
+  *  3 = schema.json - The entire configuration schema. (13 = pattern groups)
+  *  4 = schema.yml - The entire configuration schema.
+  */
+-//#define CONFIG_EXPORT 2 // :[1:'JSON', 2:'config.ini', 3:'schema.json', 4:'schema.yml']
++//#define CONFIG_EXPORT   // :[1:'JSON', 2:'config.ini', 3:'schema.json', 4:'schema.yml']
+ 
+ //===========================================================================
+ //============================= Thermal Settings ============================
+@@ -324,13 +329,13 @@
+  * Thermal Protection parameters for the bed are just as above for hotends.
+  */
+ #if ENABLED(THERMAL_PROTECTION_BED)
+-  #define THERMAL_PROTECTION_BED_PERIOD        20 // (seconds)
++  #define THERMAL_PROTECTION_BED_PERIOD       180 // (seconds)
+   #define THERMAL_PROTECTION_BED_HYSTERESIS     2 // (°C)
+ 
+   /**
+    * As described above, except for the bed (M140/M190/M303).
+    */
+-  #define WATCH_BED_TEMP_PERIOD                60 // (seconds)
++  #define WATCH_BED_TEMP_PERIOD               180 // (seconds)
+   #define WATCH_BED_TEMP_INCREASE               2 // (°C)
+ #endif
+ 
+@@ -577,7 +582,7 @@
+  *
+  * Define one or both of these to override the default 0-255 range.
+  */
+-//#define FAN_MIN_PWM 50
++#define FAN_MIN_PWM 50
+ //#define FAN_MAX_PWM 128
+ 
+ /**
+@@ -885,7 +890,7 @@
+ //#define HOMING_BACKOFF_POST_MM { 2, 2, 2 }  // (linear=mm, rotational=°) Backoff from endstops after homing
+ //#define XY_COUNTERPART_BACKOFF_MM 0         // (mm) Backoff X after homing Y, and vice-versa
+ 
+-//#define QUICK_HOME                          // If G28 contains XY do a diagonal move first
++#define QUICK_HOME                            // If G28 contains XY do a diagonal move first
+ //#define HOME_Y_BEFORE_X                     // If G28 contains XY home Y before X
+ //#define HOME_Z_FIRST                        // Home Z first. Requires a real endstop (not a probe).
+ //#define CODEPENDENT_XY_HOMING               // If X/Y can't home without homing Y/X first
+@@ -957,7 +962,7 @@
+    *
+    * Set the default state here, change with 'M401 S' or UI, use M500 to save, M502 to reset.
+    */
+-  //#define BLTOUCH_HS_MODE true
++  #define BLTOUCH_HS_MODE true  // JNP: CR Touch stays deployed between points
+ 
+ #endif // BLTOUCH
+ 
+@@ -1054,7 +1059,7 @@
+    *   M4: 40 = Clockwise, 41 = Counter-Clockwise
+    *   M5: 50 = Clockwise, 51 = Counter-Clockwise
+    */
+-  #define TRAMMING_SCREW_THREAD 30
++  #define TRAMMING_SCREW_THREAD 40
+ 
+ #endif
+ 
+@@ -1274,7 +1279,7 @@
+  * vibration and surface artifacts. The algorithm adapts to provide the best possible step smoothing at the
+  * lowest stepping frequencies.
+  */
+-//#define ADAPTIVE_STEP_SMOOTHING
++#define ADAPTIVE_STEP_SMOOTHING
+ 
+ /**
+  * Custom Microstepping
+@@ -1360,8 +1365,9 @@
+ // Change values more rapidly when the encoder is rotated faster
+ #define ENCODER_RATE_MULTIPLIER
+ #if ENABLED(ENCODER_RATE_MULTIPLIER)
+-  #define ENCODER_10X_STEPS_PER_SEC   30  // (steps/s) Encoder rate for 10x speed
+-  #define ENCODER_100X_STEPS_PER_SEC  80  // (steps/s) Encoder rate for 100x speed
++  #define ENCODER_5X_STEPS_PER_SEC    30  // (steps/s) Encoder rate for 10x speed
++  #define ENCODER_10X_STEPS_PER_SEC   80  // (steps/s) Encoder rate for 100x speed
++  #define ENCODER_100X_STEPS_PER_SEC 130  // (steps/s) Encoder rate for 100x speed
+ #endif
+ 
+ // Play a beep when the feedrate is changed from the Status Screen
+@@ -1377,7 +1383,7 @@
+ //#define LCD_BACKLIGHT_TIMEOUT_MINS 1  // (minutes) Timeout before turning off the backlight
+ 
+ #if HAS_BED_PROBE && EITHER(HAS_MARLINUI_MENU, HAS_TFT_LVGL_UI)
+-  //#define PROBE_OFFSET_WIZARD       // Add a Probe Z Offset calibration option to the LCD menu
++  #define PROBE_OFFSET_WIZARD       // Add a Probe Z Offset calibration option to the LCD menu
+   #if ENABLED(PROBE_OFFSET_WIZARD)
+     /**
+      * Enable to init the Probe Z-Offset when starting the Wizard.
+@@ -1571,7 +1577,7 @@
+    * an option on the LCD screen to continue the print from the last-known
+    * point in the file.
+    */
+-  //#define POWER_LOSS_RECOVERY
++  #define POWER_LOSS_RECOVERY
+   #if ENABLED(POWER_LOSS_RECOVERY)
+     #define PLR_ENABLED_DEFAULT   false // Power Loss Recovery enabled by default. (Set with 'M413 Sn' & M500)
+     //#define BACKUP_POWER_SUPPLY       // Backup power / UPS to move the steppers on power loss
+@@ -1617,17 +1623,17 @@
+    *  - SDSORT_CACHE_NAMES will retain the sorted file listing in RAM. (Expensive!)
+    *  - SDSORT_DYNAMIC_RAM only uses RAM when the SD menu is visible. (Use with caution!)
+    */
+-  //#define SDCARD_SORT_ALPHA
++  //#define SDCARD_SORT_ALPHA  // JNP: off = stock Creality order, newest file on top (SDCARD_RATHERRECENTFIRST)
+ 
+   // SD Card Sorting options
+   #if ENABLED(SDCARD_SORT_ALPHA)
+     #define SDSORT_LIMIT       40     // Maximum number of sorted items (10-256). Costs 27 bytes each.
+     #define SDSORT_FOLDERS     -1     // -1=above  0=none  1=below
+     #define SDSORT_GCODE       false  // Enable G-code M34 to set sorting behaviors: M34 S<-1|0|1> F<-1|0|1>
+-    #define SDSORT_USES_RAM    false  // Pre-allocate a static array for faster pre-sorting.
++    #define SDSORT_USES_RAM    true   // Pre-allocate a static array for faster pre-sorting.
+     #define SDSORT_USES_STACK  false  // Prefer the stack for pre-sorting to give back some SRAM. (Negated by next 2 options.)
+-    #define SDSORT_CACHE_NAMES false  // Keep sorted items in RAM longer for speedy performance. Most expensive option.
+-    #define SDSORT_DYNAMIC_RAM false  // Use dynamic allocation (within SD menus). Least expensive option. Set SDSORT_LIMIT before use!
++    #define SDSORT_CACHE_NAMES true   // Keep sorted items in RAM longer for speedy performance. Most expensive option.
++    #define SDSORT_DYNAMIC_RAM true   // Use dynamic allocation (within SD menus). Least expensive option. Set SDSORT_LIMIT before use!
+     #define SDSORT_CACHE_VFATS 2      // Maximum number of 13-byte VFAT entries to use for sorting.
+                                       // Note: Only affects SCROLL_LONG_FILENAMES with SDSORT_CACHE_NAMES but not SDSORT_DYNAMIC_RAM.
+   #endif
+@@ -1640,7 +1646,7 @@
+   //#define LONG_FILENAME_WRITE_SUPPORT   // Create / delete files with long filenames via M28, M30, and Binary Transfer Protocol
+   //#define M20_TIMESTAMP_SUPPORT         // Include timestamps by adding the 'T' flag to M20 commands
+ 
+-  //#define SCROLL_LONG_FILENAMES         // Scroll long filenames in the SD card menu
++  #define SCROLL_LONG_FILENAMES           // Scroll long filenames in the SD card menu
+ 
+   //#define SD_ABORT_NO_COOLDOWN          // Leave the heaters on after Stop Print (not recommended!)
+ 
+@@ -1764,7 +1770,7 @@
+  * By default an onboard SD card reader may be shared as a USB mass-
+  * storage device. This option hides the SD card from the host PC.
+  */
+-//#define NO_SD_HOST_DRIVE   // Disable SD Card access over USB (for security).
++#define NO_SD_HOST_DRIVE   // Disable SD Card access over USB (for security).
+ 
+ /**
+  * Additional options for Graphical Displays
+@@ -2064,11 +2070,11 @@
+  *
+  * Warning: Does not respect endstops!
+  */
+-//#define BABYSTEPPING
++#define BABYSTEPPING
+ #if ENABLED(BABYSTEPPING)
+   //#define INTEGRATED_BABYSTEPPING         // EXPERIMENTAL integration of babystepping into the Stepper ISR
+-  //#define BABYSTEP_WITHOUT_HOMING
+-  //#define BABYSTEP_ALWAYS_AVAILABLE       // Allow babystepping at all times (not just during movement)
++  #define BABYSTEP_WITHOUT_HOMING
++  #define BABYSTEP_ALWAYS_AVAILABLE         // Allow babystepping at all times (not just during movement)
+   //#define BABYSTEP_XY                     // Also enable X/Y Babystepping. Not supported on DELTA!
+   #define BABYSTEP_INVERT_Z false           // Change if Z babysteps should go the other way
+   //#define BABYSTEP_MILLIMETER_UNITS       // Specify BABYSTEP_MULTIPLICATOR_(XY|Z) in mm instead of micro-steps
+@@ -2087,7 +2093,7 @@
+ 
+   //#define BABYSTEP_DISPLAY_TOTAL          // Display total babysteps since last G28
+ 
+-  //#define BABYSTEP_ZPROBE_OFFSET          // Combine M851 Z and Babystepping
++  #define BABYSTEP_ZPROBE_OFFSET            // Combine M851 Z and Babystepping
+   #if ENABLED(BABYSTEP_ZPROBE_OFFSET)
+     //#define BABYSTEP_HOTEND_Z_OFFSET      // For multiple hotends, babystep relative Z offsets
+     //#define BABYSTEP_ZPROBE_GFX_OVERLAY   // Enable graphical overlay on Z-offset editor
+@@ -3207,7 +3213,7 @@
+   /**
+    * Step on both rising and falling edge signals (as with a square wave).
+    */
+-  //#define SQUARE_WAVE_STEPPING
++  #define SQUARE_WAVE_STEPPING
+ 
+   /**
+    * Enable M122 debugging command for TMC stepper drivers.
+diff --git a/Marlin/SmartTramming.h b/Marlin/SmartTramming.h
+new file mode 100644
+index 0000000..20025d3
+--- /dev/null
++++ b/Marlin/SmartTramming.h
+@@ -0,0 +1,47 @@
++/**
++ * Smart Ender-3 V2 Neo settings. SPDX-License-Identifier: GPL-3.0-or-later
++ */
++#pragma once
++
++#define SMART_BED_TRAMMING
++
++// Owner-reported Gen 4 AIHM17 (TJC). The custom pages use 8x16 ASCII text and
++// rectangles only; diagonal lines are sent as pixel-row rectangles.
++#define TJC_DISPLAY
++
++// Retain the printer's factory display assets. Library 7 belongs to Marlin's
++// optional unified asset package; stock Creality panels use library 9.
++#define USE_STOCK_DWIN_SET
++
++// This header is included by Configuration_adv.h, after Conditionals_LCD.h.
++// Override that older upstream version's generic brightness range for TJC.
++#undef LCD_BRIGHTNESS_MAX
++#define LCD_BRIGHTNESS_MIN 6
++#define LCD_BRIGHTNESS_MAX 40
++#define LCD_BRIGHTNESS_DEFAULT 20
++
++// Fixed probe-tip positions, FL, FR, BR, BL (machine coordinates, NOT nozzle).
++// Centered on the measured plate center X=120 (edges at X=3 / X=237): 32 mm in from
++// each side. FR/BR need nozzle X = 205+39 = 244 = X_MAX_POS. Y 25 / 205.
++// Every scan re-checks reachability with the active probe offsets.
++#define SMART_TRAMMING_POINTS { { 35, 25 }, { 205, 25 }, { 205, 205 }, { 35, 205 } }
++#define SMART_TRAMMING_TOLERANCE_MM       0.05f
++#define SMART_TRAMMING_MINOR_MM           0.10f
++#define SMART_TRAMMING_CLEARANCE_MM       5.0f   // = Z_CLEARANCE_BETWEEN_PROBES
++
++// After measuring, park the nozzle at this Y so the bed comes forward (owner-chosen).
++#define SMART_TRAMMING_PARK_X             120   // plate center
++#define SMART_TRAMMING_PARK_Y             222   // Y_MAX_POS is 225
++
++// Bed screws: M4 x 0.7 (stock Ender-3 V2 / Neo). Degrees = 360 * correction / pitch.
++// Set to 0 to hide degree estimates.
++#define SMART_TRAMMING_SCREW_PITCH_MM     0.7f
++
++// Knob direction as the owner turns it: looking DOWN at the knob from above.
++// Confirmed on the printer 2026-11-07: from above, clockwise RAISES the corner.
++#define SMART_TRAMMING_DIRECTION_CONFIRMED 1
++#define SMART_TRAMMING_CW_RAISES_BED      1
++
++// Owner's X home offset (M206 X): G-code X0 sits 2 mm onto the plate. Applied when
++// settings are reset to defaults (e.g. after a firmware update changes the layout).
++#define JNP_DEFAULT_HOME_OFFSET_X         -5
+diff --git a/Marlin/src/feature/smart_tramming.cpp b/Marlin/src/feature/smart_tramming.cpp
+new file mode 100644
+index 0000000..d6f35ce
+--- /dev/null
++++ b/Marlin/src/feature/smart_tramming.cpp
+@@ -0,0 +1,242 @@
++/** Smart Tramming scan controller. SPDX-License-Identifier: GPL-3.0-or-later */
++#ifdef SMART_TRAMMING_HOST
++  #include "../../../tests/smart_tramming_mocks.h"
++#else
++  #include "../inc/MarlinConfig.h"
++#endif
++
++#if ENABLED(SMART_BED_TRAMMING)
++
++#if !HAS_BED_PROBE || DISABLED(DWIN_CREALITY_LCD) || !IS_CARTESIAN
++  #error "Smart Tramming currently requires a Cartesian printer, bed probe and Creality LCD UI."
++#endif
++
++#include "smart_tramming.h"
++#ifndef SMART_TRAMMING_HOST
++#include "../MarlinCore.h"
++#include "../gcode/gcode.h"
++#include "../gcode/queue.h"
++#include "../module/motion.h"
++#include "../module/planner.h"
++#include "../module/probe.h"
++#include "../module/temperature.h"
++#include "../lcd/marlinui.h"
++#include "bedlevel/bedlevel.h"
++#endif
++
++static_assert(SMART_TRAMMING_TOLERANCE_MM > 0, "Tramming tolerance must be positive.");
++static_assert(SMART_TRAMMING_MINOR_MM >= SMART_TRAMMING_TOLERANCE_MM, "Invalid tramming color thresholds.");
++static_assert(SMART_TRAMMING_CLEARANCE_MM >= Z_CLEARANCE_BETWEEN_PROBES, "Insufficient tramming clearance.");
++static_assert(SMART_TRAMMING_SCREW_PITCH_MM >= 0, "Pitch must be positive or zero (unknown).");
++static_assert(SMART_TRAMMING_PARK_Y <= Y_MAX_POS, "Park Y beyond Y travel.");
++
++namespace smart_tramming {
++  Session session;
++  const Point positions[4] = SMART_TRAMMING_POINTS;
++  bool heat_before_level = false;
++
++  static xy_pos_t native_point(const Point &point) { return xy_pos_t { point.x, point.y }; }
++
++  bool valid_points(const Point *pts) {
++    for (uint8_t i = 0; i < 4; ++i) {
++      if (!isfinite(pts[i].x) || !isfinite(pts[i].y) || !probe.can_reach(native_point(pts[i]))) return false;
++      for (uint8_t j = 0; j < i; ++j)
++        if (fabsf(pts[i].x - pts[j].x) < 0.001f && fabsf(pts[i].y - pts[j].y) < 0.001f) return false;
++    }
++    return pts[0].x < pts[1].x && pts[3].x < pts[2].x
++      && pts[0].y < pts[3].y && pts[1].y < pts[2].y;
++  }
++
++  bool points_reachable() { return valid_points(positions); }
++
++  const char *corner_name(const uint8_t corner) {
++    static const char * const names[] = { "Front Left", "Front Right", "Back Right", "Back Left" };
++    return corner < 4 ? names[corner] : "Unknown";
++  }
++
++  bool busy() {
++    return session.stage == Stage::Queued || session.stage == Stage::Heating
++        || session.stage == Stage::Homing || session.stage == Stage::Probing;
++  }
++
++  static void invalidate() {
++    session.summary = Summary{};
++    session.measured_count = 0;
++    for (float &height : session.heights) height = NAN;
++  }
++
++  static void fail(const char *message) {
++    invalidate(); // Never offer adjustments from an incomplete/failed scan.
++    session.error = message;
++    session.stage = Stage::Error;
++    ++session.revision;
++  }
++
++  void begin() {
++    if (busy()) return;
++    session = Session{};
++  }
++
++  void select_corner(const uint8_t corner) {
++    if (busy() || corner >= 4) return;
++    session.selected_corner = corner;
++    if (session.summary.valid) {
++      session.summary = summarize(session.heights,
++        SMART_TRAMMING_TOLERANCE_MM, SMART_TRAMMING_MINOR_MM, SMART_TRAMMING_SCREW_PITCH_MM);
++      session.stage = Stage::Results;
++    }
++    else {
++      invalidate();
++      session.stage = Stage::Ready;
++    }
++    ++session.revision;
++  }
++
++  bool request_scan() {
++    if (busy()) return false;
++    invalidate();
++    session.error = nullptr;
++    session.cancel_requested = false;
++    if (!IsRunning() || printJobOngoing() || printingIsPaused()
++        || planner.has_blocks_queued() || queue.has_commands_queued()) {
++      fail("Printer must be idle"); return false;
++    }
++    if (!points_reachable()) { fail("Probe can't reach a corner"); return false; }
++    session.stage = Stage::Queued;
++    ++session.revision;
++    if (!queue.enqueue_one(F("G36"))) { fail("Command queue is busy"); return false; }
++    return true;
++  }
++
++  void cancel() {
++    if (busy()) {
++      session.cancel_requested = true;
++      #ifndef SMART_TRAMMING_HOST
++        if (session.stage == Stage::Heating) wait_for_heatup = false;   // break M190-style wait
++      #endif
++      if (session.stage == Stage::Queued) session.stage = Stage::Cancelled;
++      ++session.revision;
++    }
++  }
++
++  void execute_scan() {
++    // G36 is a project-local queue entry point, not a host-triggered scan API.
++    if (session.stage != Stage::Queued) return;
++    if (session.cancel_requested) {
++      session.stage = Stage::Cancelled;
++      ++session.revision;
++      return;
++    }
++    if (!IsRunning() || printJobOngoing() || printingIsPaused() || !points_reachable()) {
++      fail("Scan preconditions changed"); return;
++    }
++    planner.synchronize();
++    TERN_(HAS_LEVELING, set_bed_leveling_enabled(false));
++    // G28 also uses the global feedrate save slot, so keep our own copy.
++    const feedRate_t entry_feedrate = feedrate_mm_s;
++    const int16_t entry_percentage = feedrate_percentage;
++    feedrate_percentage = 100;
++
++    #if !defined(SMART_TRAMMING_HOST) && HAS_HEATED_BED && HAS_PREHEAT
++      if (heat_before_level) {   // Tram at printing temperature (PLA preheat bed temp)
++        session.stage = Stage::Heating;
++        ++session.revision;
++        thermalManager.setTargetBed(ui.material_preset[0].bed_temp);
++        thermalManager.wait_for_bed(true);   // idle() keeps the LCD and Cancel responsive
++        if (session.cancel_requested || !IsRunning()) {
++          feedrate_mm_s = entry_feedrate; feedrate_percentage = entry_percentage;
++          invalidate(); session.stage = Stage::Cancelled; ++session.revision; return;
++        }
++      }
++    #endif
++    // Home only when needed. All four corners are compared within one pass, so a
++    // knob turn between passes does not need a new Z reference.
++    if (!all_axes_trusted()) {
++      session.stage = Stage::Homing;
++      ++session.revision;
++      gcode.process_subcommands_now(F("G28"));
++      TERN_(HAS_LEVELING, set_bed_leveling_enabled(false));
++    }
++    bool failed = !IsRunning() || !all_axes_trusted();
++    if (failed) session.error = "Homing did not complete";
++
++    for (uint8_t i = 0; i < 4 && !failed && !session.cancel_requested; ++i) {
++      // EEPROM/runtime offsets and homing can change reachability.
++      const xy_pos_t point = native_point(positions[i]);
++      if (!probe.can_reach(point)) {
++        session.error = "Probe can't reach a corner";
++        failed = true;
++        break;
++      }
++      session.stage = Stage::Probing;
++      ++session.revision;
++      // Raise only. Never lower to an absolute clearance after a failed probe.
++      do_blocking_move_to_z(_MIN(float(Z_MAX_POS), _MAX(current_position.z, float(SMART_TRAMMING_CLEARANCE_MM))));
++      if (!IsRunning() || !all_axes_trusted()) {
++        session.error = "Printer stopped during scan";
++        failed = true;
++        break;
++      }
++      if (session.cancel_requested) break;
++      // Keep the CR Touch deployed between corners (as G29/G35); stow after the last one.
++      const float z = probe.probe_at_point(point, i < 3 ? PROBE_PT_RAISE : PROBE_PT_STOW, 0, true);
++      if (!isfinite(z) || !IsRunning() || !all_axes_trusted()) {
++        session.error = "Probe failed; check CR Touch";
++        failed = true;
++        break;
++      }
++      session.heights[i] = z;
++      ++session.measured_count;
++      ++session.revision;
++    }
++
++    // Stow and park only when the printer still permits motion.
++    if (IsRunning() && all_axes_trusted()) {
++      if (probe.stow()) {
++        failed = true;
++        session.error = "CR Touch could not stow";
++      }
++      if (!failed && all_axes_trusted()) {
++        do_blocking_move_to_z(_MIN(float(Z_MAX_POS), _MAX(current_position.z, float(SMART_TRAMMING_CLEARANCE_MM))));
++        // Bed forward (nozzle near max Y), so all four knobs are easy to reach.
++        if (IsRunning() && all_axes_trusted())
++          do_blocking_move_to_xy(SMART_TRAMMING_PARK_X, SMART_TRAMMING_PARK_Y, feedRate_t(XY_PROBE_FEEDRATE_MM_S));
++      }
++    }
++    if (!IsRunning()) {
++      failed = true;
++      session.error = "Printer stopped during scan";
++    }
++    feedrate_mm_s = entry_feedrate;
++    feedrate_percentage = entry_percentage;
++    // Keep mesh OFF: turning wheels invalidates its relationship to the bed.
++    // Z trust is released in end(), when the user leaves Bed Tramming.
++
++    if (failed) fail(session.error ? session.error : "Measurement failed");
++    else if (session.cancel_requested) {
++      invalidate();
++      session.stage = Stage::Cancelled;
++    }
++    else {
++      session.summary = summarize(session.heights,
++        SMART_TRAMMING_TOLERANCE_MM, SMART_TRAMMING_MINOR_MM, SMART_TRAMMING_SCREW_PITCH_MM);
++      if (!session.summary.valid) fail("Invalid measurement data");
++      else session.stage = Stage::Results;
++    }
++    ++session.revision;
++    ui.set_status(F("Tramming: rebuild mesh before print"));
++  }
++
++  void end() {
++    // Knob turns moved the bed: force a fresh Z home before anything else uses Z.
++    if (!busy()) set_axis_never_homed(Z_AXIS);
++  }
++
++  void finish() {
++    if (session.stage == Stage::Results && session.summary.valid && session.summary.complete) {
++      session.stage = Stage::Complete;
++      ++session.revision;
++    }
++  }
++}
++#endif
+diff --git a/Marlin/src/feature/smart_tramming.h b/Marlin/src/feature/smart_tramming.h
+new file mode 100644
+index 0000000..eab6c10
+--- /dev/null
++++ b/Marlin/src/feature/smart_tramming.h
+@@ -0,0 +1,30 @@
++/** Smart Tramming scan controller. SPDX-License-Identifier: GPL-3.0-or-later */
++#pragma once
++
++#ifndef SMART_TRAMMING_HOST
++  #include "../inc/MarlinConfigPre.h"
++#endif
++
++#if ENABLED(SMART_BED_TRAMMING)
++
++#include "smart_tramming_types.h"
++
++namespace smart_tramming {
++  // Fixed probe-tip positions (SMART_TRAMMING_POINTS), FL, FR, BR, BL.
++  extern const Point positions[4];
++  extern Session session;
++  extern bool heat_before_level;   // Leveling menu checkbox (saved in EEPROM)
++  bool busy();
++  void begin();
++  void select_corner(uint8_t corner);
++  bool valid_points(const Point *positions);
++  bool points_reachable();   // With the active probe offsets and travel limits
++  bool request_scan();
++  void cancel();
++  void execute_scan(); // Only called through the command queue, never LCD idle.
++  void finish();
++  void end();          // Leaving Bed Tramming: Z must be re-homed before printing
++  const char *corner_name(uint8_t corner);
++}
++
++#endif
+diff --git a/Marlin/src/feature/smart_tramming_draw.h b/Marlin/src/feature/smart_tramming_draw.h
+new file mode 100644
+index 0000000..ae48564
+--- /dev/null
++++ b/Marlin/src/feature/smart_tramming_draw.h
+@@ -0,0 +1,63 @@
++/** Bounded, incremental LCD drawing. SPDX-License-Identifier: GPL-3.0-or-later */
++#pragma once
++#include <stdint.h>
++#include <string.h>
++#include <stdlib.h>
++
++namespace smart_tramming {
++  struct DrawCommand {
++    enum Kind : uint8_t { Rectangle, Text, Line } kind;
++    bool fill;
++    uint16_t color, x0, y0, x1, y1;
++    char label[33];
++  };
++
++  class DrawQueue {
++    static constexpr uint16_t capacity = 192;
++    DrawCommand commands[capacity];
++    uint16_t count = 0, cursor = 0;
++    bool overflowed = false, line_active = false;
++    int x, y, dx, dy, sx, sy, error;
++  public:
++    void clear() { count=cursor=0; overflowed=line_active=false; }
++    bool pending() const { return cursor<count; }
++    bool overflow() const { return overflowed; }
++    void add(DrawCommand::Kind kind,bool fill,uint16_t color,uint16_t x0,uint16_t y0,
++             uint16_t x1,uint16_t y1,const char *label=nullptr) {
++      if(cursor==count&&!line_active)count=cursor=0;   // Fully drawn: reuse the space (live updates)
++      if(count==capacity){overflowed=true;return;}
++      DrawCommand &c=commands[count++];
++      c.kind=kind;c.fill=fill;c.color=color;c.x0=x0;c.y0=y0;c.x1=x1;c.y1=y1;
++      if(label){strncpy(c.label,label,32);c.label[32]='\0';}else c.label[0]='\0';
++    }
++    bool next(DrawCommand &out) {
++      if(!pending())return false;
++      const DrawCommand &c=commands[cursor];
++      if(c.kind!=DrawCommand::Line){out=c;++cursor;return true;}
++      out=c;out.kind=DrawCommand::Rectangle;out.fill=true;out.label[0]='\0';
++      if(c.x0==c.x1||c.y0==c.y1){
++        out.x0=c.x0<c.x1?c.x0:c.x1;out.x1=c.x0<c.x1?c.x1:c.x0;
++        out.y0=c.y0<c.y1?c.y0:c.y1;out.y1=c.y0<c.y1?c.y1:c.y0;
++        ++cursor;return true;
++      }
++      // Expand each diagonal into horizontal pixel runs, one per render tick.
++      // TJC receives ordinary rectangles rather than a burst of diagonal commands.
++      if(!line_active){
++        x=c.x0;y=c.y0;dx=abs(int(c.x1)-x);dy=-abs(int(c.y1)-y);
++        sx=x<int(c.x1)?1:-1;sy=y<int(c.y1)?1:-1;error=dx+dy;line_active=true;
++      }
++      const int first=x,row=y;
++      int last=x;
++      for(;;){
++        last=x;
++        if(x==int(c.x1)&&y==int(c.y1)){line_active=false;++cursor;break;}
++        const int twice=2*error;
++        if(twice>=dy){error+=dy;x+=sx;}
++        if(twice<=dx){error+=dx;y+=sy;}
++        if(y!=row)break;
++      }
++      out.x0=first<last?first:last;out.x1=first<last?last:first;out.y0=out.y1=row;
++      return true;
++    }
++  };
++}
+diff --git a/Marlin/src/feature/smart_tramming_math.h b/Marlin/src/feature/smart_tramming_math.h
+new file mode 100644
+index 0000000..6934fbf
+--- /dev/null
++++ b/Marlin/src/feature/smart_tramming_math.h
+@@ -0,0 +1,69 @@
++/**
++ * Smart Tramming calculations. SPDX-License-Identifier: GPL-3.0-or-later
++ * Independent of motion and LCD so numerical behavior can be tested on a host.
++ */
++#pragma once
++
++#include <stdint.h>
++#include <math.h>
++
++namespace smart_tramming {
++
++  enum class Severity : uint8_t { Unknown, Acceptable, Minor, Significant };
++
++  struct Summary {
++    bool valid = false, complete = false;
++    float relative_mm[4] = {}, correction_mm[4] = {}, degrees[4] = {};
++    Severity severity[4] = { Severity::Unknown, Severity::Unknown, Severity::Unknown, Severity::Unknown };
++    float spread_mm = NAN;
++    float target_mm = NAN;
++    uint8_t adjust = 255;   // The one corner to adjust next (largest deviation), 255 = none
++  };
++
++  // Allow only a sub-micron float rounding margin, not a measurement tolerance.
++  inline bool within(const float value, const float limit) { return value <= limit + 0.000001f; }
++
++  inline Summary summarize(const float heights[4], const float tolerance, const float minor_threshold,
++                           const float pitch_mm) {
++    Summary out;
++    if (!isfinite(tolerance) || tolerance <= 0
++        || !isfinite(minor_threshold) || minor_threshold < tolerance) return out;
++    for (uint8_t i = 0; i < 4; ++i)
++      if (!isfinite(heights[i])) return out;
++
++    float low = heights[0], high = heights[0];
++    float mean = 0;
++    for (uint8_t i = 0; i < 4; ++i) mean += heights[i] * 0.25f;
++    if (!isfinite(mean)) return out;
++    out.target_mm = mean;
++    for (uint8_t i = 0; i < 4; ++i) {
++      if (heights[i] < low) low = heights[i];
++      if (heights[i] > high) high = heights[i];
++      const float delta = heights[i] - mean, magnitude = fabsf(delta);
++      if (!isfinite(delta)) return Summary{};
++      out.relative_mm[i] = delta;
++      out.correction_mm[i] = -delta; // Positive means raise the bed.
++      out.degrees[i] = isfinite(pitch_mm) && pitch_mm > 0 ? magnitude / pitch_mm * 360.0f : NAN;
++      if (!isfinite(out.degrees[i])) out.degrees[i] = NAN;
++      out.severity[i] = within(magnitude, tolerance * 0.5f) ? Severity::Acceptable
++                     : within(magnitude, minor_threshold) ? Severity::Minor : Severity::Significant;
++    }
++    out.spread_mm = high - low;
++    if (!isfinite(out.spread_mm)) return Summary{};
++    out.complete = within(out.spread_mm, tolerance);
++    if (out.complete) for (uint8_t i = 0; i < 4; ++i) out.severity[i] = Severity::Acceptable;
++    else {
++      // One knob at a time: only the corner furthest from the target gets an instruction.
++      for (uint8_t i = 0; i < 4; ++i)
++        if (out.severity[i] != Severity::Acceptable
++            && (out.adjust == 255 || fabsf(out.relative_mm[i]) > fabsf(out.relative_mm[out.adjust])))
++          out.adjust = i;
++    }
++    out.valid = true;
++    return out;
++  }
++
++  inline bool clockwise_for_correction(const float correction_mm, const bool cw_raises_bed) {
++    return (correction_mm > 0) == cw_raises_bed;
++  }
++}
+diff --git a/Marlin/src/feature/smart_tramming_types.h b/Marlin/src/feature/smart_tramming_types.h
+new file mode 100644
+index 0000000..357a057
+--- /dev/null
++++ b/Marlin/src/feature/smart_tramming_types.h
+@@ -0,0 +1,18 @@
++/** Smart Tramming UI state. SPDX-License-Identifier: GPL-3.0-or-later */
++#pragma once
++#include "smart_tramming_math.h"
++
++namespace smart_tramming {
++  struct Point { float x, y; };
++  enum class Stage : uint8_t { Ready, Queued, Heating, Homing, Probing, Results, Complete, Error, Cancelled };
++
++  struct Session {
++    Stage stage = Stage::Ready;
++    uint8_t selected_corner = 0, measured_count = 0;
++    float heights[4] = { NAN, NAN, NAN, NAN };
++    Summary summary;
++    const char *error = nullptr;
++    bool cancel_requested = false;
++    uint16_t revision = 0;
++  };
++}
+diff --git a/Marlin/src/feature/smart_tramming_view.cpp b/Marlin/src/feature/smart_tramming_view.cpp
+new file mode 100644
+index 0000000..d9d3ee0
+--- /dev/null
++++ b/Marlin/src/feature/smart_tramming_view.cpp
+@@ -0,0 +1,149 @@
++/** Independent measured-Z tramming dashboard. SPDX-License-Identifier: GPL-3.0-or-later */
++#ifdef SMART_TRAMMING_HOST
++  #define SMART_TRAMMING_VIEW_ENABLED
++#else
++  #include "../inc/MarlinConfig.h"
++  #if ENABLED(SMART_BED_TRAMMING)
++    #define SMART_TRAMMING_VIEW_ENABLED
++  #endif
++#endif
++#ifdef SMART_TRAMMING_VIEW_ENABLED
++#include "smart_tramming_view.h"
++#include "../lcd/e3v2/common/jnp_theme.h"
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++
++namespace smart_tramming {
++  namespace {
++    constexpr uint16_t bg=jnp_theme::background, panel=jnp_theme::panel, ink=jnp_theme::ink, dim=jnp_theme::muted,
++      accent=jnp_theme::accent, green=jnp_theme::green, yellow=jnp_theme::yellow, red=jnp_theme::red;
++    const char *name(const uint8_t i) {
++      const char * const names[]={"Front Left","Front Right","Back Right","Back Left"}; return names[i];
++    }
++    uint16_t color(const Severity grade) {
++      return grade==Severity::Acceptable?green:grade==Severity::Minor?yellow:grade==Severity::Significant?red:dim;
++    }
++    void mm(char *buffer,const size_t size,const float value,const bool sign=false) {
++      if(!isfinite(value)||fabsf(value)>=100){snprintf(buffer,size,"--.---");return;}
++      const unsigned n=unsigned(lroundf(fabsf(value)*1000));
++      const uint16_t whole=n/1000;
++      snprintf(buffer,size,"%s%u.%03u",value<-.0005f?"-":sign?"+":"",unsigned(whole),n%1000);
++    }
++    // Knob indicator: square outline (2 px) with an arrowhead on the top edge.
++    // Arrow right = clockwise, left = counterclockwise. About 7 rectangle commands,
++    // instead of ~90 pixel rows for a circle - fast and safe on the TJC panel.
++    void knob_box(const Surface &s,const int x,const int y,const uint16_t c,const bool arrow,const bool cw) {
++      constexpr int h=21;
++      s.rectangle(false,c,x-h,y-h,x+h,y+h);
++      s.rectangle(false,c,x-h+1,y-h+1,x+h-1,y+h-1);
++      if(arrow) for(int i=0;i<5;i++){
++        const int col=cw?x+4+i:x-4-i;            // tip points the way to turn
++        s.rectangle(true,c,col,y-h-(4-i),col,y-h+(4-i));
++      }
++    }
++    void button(const Surface &s,const int x,const char *label,const bool selected) {
++      s.rectangle(true,selected?accent:panel,x,319,x+119,349);s.text(selected?bg:ink,x+8,326,label);
++    }
++  }
++
++  void draw_menu(const Surface &s,const MenuView &view) {
++    s.rectangle(true,bg,0,0,271,353);s.rectangle(true,jnp_theme::title,0,0,271,30);
++    const bool paper=view.page==1;
++    s.text(ink,12,7,paper?"Paper Leveling":"Leveling");
++    const char *leveling[MENU_ITEMS]={"Back","Bed Tramming","Auto Mesh (5x5)","View Mesh",
++      view.heat_before_level?"[X] Heat bed first":"[ ] Heat bed first","Paper Leveling  >","Probe Accuracy Test"};
++    const char *corners[MENU_ITEMS]={"Back","Home","Front Left","Front Right","Back Right","Back Left","Center"};
++    const char * const *items=paper?corners:leveling;
++    for(uint8_t i=0;i<MENU_ITEMS;i++){
++      const uint16_t y=36+i*34;
++      s.rectangle(true,i==view.selected?panel:bg,8,y,263,y+30);
++      s.text(i==view.selected?accent:ink,14,y+7,items[i]);
++    }
++    s.text(dim,12,284,view.notice);
++    s.text(dim,12,308,paper?"Nozzle to Z0 over each knob":"Tram first, then Auto Mesh");
++  }
++
++  static void draw_footer(const Surface &s,const Session &state,const uint8_t selected,const ViewSettings &settings) {
++    const bool busy=state.stage==Stage::Queued||state.stage==Stage::Heating||state.stage==Stage::Homing||state.stage==Stage::Probing;
++    const bool valid=state.summary.valid&&(state.stage==Stage::Results||state.stage==Stage::Complete);
++    const bool complete=valid&&state.summary.complete;
++    char label[48],value[12];
++    if(busy){
++      if(state.stage==Stage::Heating)snprintf(label,sizeof(label),"Heating bed first");
++      else if(state.stage==Stage::Homing)snprintf(label,sizeof(label),"Homing all axes");
++      else if(state.stage==Stage::Probing)snprintf(label,sizeof(label),"Probing corner %u/4",unsigned(state.measured_count<4?state.measured_count+1:4));
++      else snprintf(label,sizeof(label),"Scan queued");
++      s.text(accent,12,278,label);s.text(dim,12,299,state.cancel_requested?"Cancel after current operation":"Click to request cancellation");button(s,12,"Cancel",true);
++    }else if(state.stage==Stage::Complete){
++      s.text(green,12,278,"Corners within tolerance");s.text(dim,12,299,"Check Z offset; rebuild mesh");button(s,12,"Remeasure",selected==4);button(s,140,"Close",selected==5);
++    }else if(valid){
++      // The one knob to turn now, in plain words
++      const uint8_t i=state.summary.adjust<4?state.summary.adjust:0;
++      const bool cw=clockwise_for_correction(state.summary.correction_mm[i],settings.cw_raises_bed);
++      if(state.summary.adjust>=4)snprintf(label,sizeof(label),"All corners OK");
++      else if(settings.direction_confirmed&&isfinite(state.summary.degrees[i]))
++        snprintf(label,sizeof(label),"%s: turn %s %ld deg",name(i),cw?"CW":"CCW",lroundf(state.summary.degrees[i]));
++      else {
++        mm(value,sizeof(value),fabsf(state.summary.correction_mm[i]));
++        snprintf(label,sizeof(label),"%s: %s %s mm",name(i),state.summary.correction_mm[i]>0?"raise":"lower",value);
++      }
++      s.text(ink,12,278,label);
++      s.text(dim,12,299,"Then press Remeasure");
++      button(s,12,"Remeasure",selected==4);button(s,140,complete?"Done":"Exit",selected==5);
++    }else{
++      s.text(state.stage==Stage::Error?red:dim,12,278,state.stage==Stage::Error?"Scan unavailable":state.stage==Stage::Cancelled?"Scan cancelled":"All four knobs are adjustable");
++      s.text(dim,12,299,state.stage==Stage::Error?(state.error?state.error:"Check configuration"):!settings.points_reachable?"Probe can't reach a corner":"Measure, adjust, then remeasure");
++      button(s,12,"Measure",selected==4);button(s,140,"Back",selected==5);
++    }
++  }
++
++  void draw_dashboard(const Surface &s,const Session &state,const uint8_t selected,const ViewSettings &settings,const bool full) {
++    const bool valid=state.summary.valid&&(state.stage==Stage::Results||state.stage==Stage::Complete);
++    const bool complete=valid&&state.summary.complete;
++    char label[48],value[12],limit[12];
++    // full: page just opened. Otherwise update in place (no blank flash): each corner card
++    // repaints its own background, so only the header and footer strips are cleared.
++    if(full)s.rectangle(true,bg,0,0,271,353);
++    else{s.rectangle(true,bg,0,31,271,95);s.rectangle(true,bg,0,273,271,353);}
++    s.rectangle(true,jnp_theme::title,0,0,271,30);
++    s.text(ink,12,7,state.stage==Stage::Complete?"Tramming complete":"Bed Tramming");
++    if(valid){
++      mm(value,sizeof(value),state.summary.spread_mm);mm(limit,sizeof(limit),settings.tolerance_mm);
++      snprintf(label,sizeof(label),"Spread %s mm (goal %s)",value,limit);s.text(complete?green:yellow,12,36,label);
++      s.text(dim,12,56,complete?"All four corners match":"Adjust one knob, then Remeasure");
++    }else{s.text(dim,12,36,"Measures all four corners");s.text(dim,12,56,"Then adjust one knob at a time");}
++    s.text(dim,120,78,"BACK");s.rectangle(false,dim,8,96,263,265);
++    for(uint8_t i=0;i<4;i++){
++      const uint16_t x=i==0||i==3?14:144,y=i<2?184:99;
++      const bool hold=valid&&state.summary.severity[i]==Severity::Acceptable;
++      const bool active=valid&&!hold&&state.summary.adjust==i;   // One knob at a time
++      const uint16_t tint=active?color(state.summary.severity[i]):hold?green:dim;
++      const bool angle=active&&isfinite(state.summary.degrees[i])&&state.summary.degrees[i]<36000;
++      const bool directed=angle&&settings.direction_confirmed;
++      const bool cw=directed&&clockwise_for_correction(state.summary.correction_mm[i],settings.cw_raises_bed);
++      s.rectangle(true,panel,x,y,x+113,y+78);s.rectangle(true,tint,x,y,x+3,y+78);
++      s.rectangle(false,selected==i?accent:panel,x-2,y-2,x+115,y+80);
++      s.text(ink,x+7,y+4,name(i));mm(value,sizeof(value),state.heights[i],true);s.text(tint,x+6,y+28,value);
++      s.text(tint,x+6,y+54,hold?"OK":!active?"":directed?(cw?"CW":"CCW"):state.summary.correction_mm[i]>0?"RAISE":"LOWER");
++      if(active||hold) knob_box(s,x+85,y+49,tint,directed,cw);
++      if(hold)snprintf(value,sizeof(value),"OK");
++      else if(angle)snprintf(value,sizeof(value),"%ld",lroundf(state.summary.degrees[i]+0.0001f));
++      else if(active)snprintf(value,sizeof(value),"?");
++      else value[0]=0;
++      if(value[0])s.text(tint,x+85-strlen(value)*4,y+41,value);
++    }
++    draw_footer(s,state,selected,settings);
++  }
++  void draw_dashboard_selection(const Surface &s,const Session &state,const uint8_t previous,
++                                const uint8_t selected,const ViewSettings &settings) {
++    for(uint8_t i=0;i<4;i++) if(i==previous||i==selected) {
++      const uint16_t x=i==0||i==3?14:144,y=i<2?184:99;
++      s.rectangle(false,i==selected?accent:bg,x-2,y-2,x+115,y+80);
++    }
++    s.rectangle(true,bg,0,273,271,353);
++    draw_footer(s,state,selected,settings);
++  }
++
++}
++#endif
+diff --git a/Marlin/src/feature/smart_tramming_view.h b/Marlin/src/feature/smart_tramming_view.h
+new file mode 100644
+index 0000000..5d0b1fe
+--- /dev/null
++++ b/Marlin/src/feature/smart_tramming_view.h
+@@ -0,0 +1,34 @@
++/** Portable Smart Tramming dashboard. SPDX-License-Identifier: GPL-3.0-or-later */
++#pragma once
++#include "smart_tramming_types.h"
++
++namespace smart_tramming {
++  // RGB565 colors and the small subset of primitives shared by supported LCDs.
++  struct Surface {
++    void (*rectangle)(bool fill, uint16_t color, uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1);
++    void (*text)(uint16_t color, uint16_t x, uint16_t y, const char *text);
++    void (*line)(uint16_t color, uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1);
++  };
++
++  struct ViewSettings {
++    float tolerance_mm;
++    bool points_reachable, direction_confirmed, cw_raises_bed;
++  };
++
++  // page 0 = Leveling: Back, Bed Tramming, Auto Mesh, View Mesh, Heat bed first, Paper Leveling, Probe Accuracy Test
++  // page 1 = Paper Leveling: Back, Home, Front Left, Front Right, Back Right, Back Left, Center
++  struct MenuView {
++    uint8_t selected;
++    const char *notice;
++    bool heat_before_level;
++    uint8_t page;
++  };
++  constexpr uint8_t MENU_ITEMS = 7;
++  void draw_menu(const Surface &surface,const MenuView &view);
++
++  // 0..3 select corners; 4 = measure/remeasure; 5 = back/done.
++  void draw_dashboard(const Surface &surface, const Session &state,
++                      uint8_t selected, const ViewSettings &settings, bool full = true);
++  void draw_dashboard_selection(const Surface &surface,const Session &state,uint8_t previous,
++                                uint8_t selected,const ViewSettings &settings);
++}
+diff --git a/Marlin/src/gcode/bedlevel/G36.cpp b/Marlin/src/gcode/bedlevel/G36.cpp
+new file mode 100644
+index 0000000..bcdf584
+--- /dev/null
++++ b/Marlin/src/gcode/bedlevel/G36.cpp
+@@ -0,0 +1,7 @@
++/** Project-local LCD scan queue handler. SPDX-License-Identifier: GPL-3.0-or-later */
++#include "../../inc/MarlinConfig.h"
++#if ENABLED(SMART_BED_TRAMMING)
++#include "../gcode.h"
++#include "../../feature/smart_tramming.h"
++void GcodeSuite::G36() { smart_tramming::execute_scan(); }
++#endif
+diff --git a/Marlin/src/gcode/bedlevel/abl/G29.cpp b/Marlin/src/gcode/bedlevel/abl/G29.cpp
+index 282fe08..66a746b 100644
+--- a/Marlin/src/gcode/bedlevel/abl/G29.cpp
++++ b/Marlin/src/gcode/bedlevel/abl/G29.cpp
+@@ -48,6 +48,9 @@
+   #include "../../../lcd/extui/ui_api.h"
+ #elif ENABLED(DWIN_CREALITY_LCD)
+   #include "../../../lcd/e3v2/creality/dwin.h"
++  #if ENABLED(SMART_BED_TRAMMING)
++    #include "../../../lcd/e3v2/creality/smart_tramming_lcd.h"
++  #endif
+ #elif ENABLED(DWIN_LCD_PROUI)
+   #include "../../../lcd/e3v2/proui/dwin.h"
+ #endif
+@@ -728,6 +731,9 @@ G29_TYPE GcodeSuite::G29() {
+             const float z = abl.measured_z + abl.Z_offset;
+             abl.z_values[abl.meshCount.x][abl.meshCount.y] = z;
+             TERN_(EXTENSIBLE_UI, ExtUI::onMeshUpdate(abl.meshCount, z));
++            #if ALL(SMART_BED_TRAMMING, DWIN_CREALITY_LCD)
++              SmartMesh_Point(abl.meshCount.x, abl.meshCount.y, z);   // JNP: live mesh viewer
++            #endif
+ 
+           #endif
+ 
+diff --git a/Marlin/src/gcode/gcode.cpp b/Marlin/src/gcode/gcode.cpp
+index 970707f..644c14d 100644
+--- a/Marlin/src/gcode/gcode.cpp
++++ b/Marlin/src/gcode/gcode.cpp
+@@ -428,6 +428,10 @@ void GcodeSuite::process_parsed_command(const bool no_ok/*=false*/) {
+         case 35: G35(); break;                                    // G35: Read four bed corners to help adjust bed screws
+       #endif
+ 
++      #if ENABLED(SMART_BED_TRAMMING)
++        case 36: G36(); break;                                    // Project-local LCD Smart Tramming scan
++      #endif
++
+       #if ENABLED(G38_PROBE_TARGET)
+         case 38:                                                  // G38.2, G38.3: Probe towards target
+           if (WITHIN(parser.subcode, 2, TERN(G38_PROBE_AWAY, 5, 3)))
+diff --git a/Marlin/src/gcode/gcode.h b/Marlin/src/gcode/gcode.h
+index e2f0b7f..e34a995 100644
+--- a/Marlin/src/gcode/gcode.h
++++ b/Marlin/src/gcode/gcode.h
+@@ -574,6 +574,10 @@ private:
+     static void G35();
+   #endif
+ 
++  #if ENABLED(SMART_BED_TRAMMING)
++    static void G36(); // Project-local Smart Tramming scan, requested by LCD
++  #endif
++
+   #if ENABLED(G38_PROBE_TARGET)
+     static void G38(const int8_t subcode);
+   #endif
+diff --git a/Marlin/src/lcd/e3v2/common/dwin_api.cpp b/Marlin/src/lcd/e3v2/common/dwin_api.cpp
+index 319c861..56492f4 100644
+--- a/Marlin/src/lcd/e3v2/common/dwin_api.cpp
++++ b/Marlin/src/lcd/e3v2/common/dwin_api.cpp
+@@ -19,7 +19,11 @@
+  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  *
+  */
+-#include "../../../inc/MarlinConfigPre.h"
++#ifdef DWIN_API_HOST
++  #include "../../../../../tests/dwin_api_mocks.h"
++#else
++  #include "../../../inc/MarlinConfigPre.h"
++#endif
+ 
+ #if HAS_DWIN_E3V2 || IS_DWIN_MARLINUI
+ 
+@@ -27,9 +31,14 @@
+ #include "dwin_set.h"
+ #include "dwin_font.h"
+ 
+-#include "../../../inc/MarlinConfig.h"
++#ifndef DWIN_API_HOST
++  #include "../../../inc/MarlinConfig.h"
++#endif
+ 
+ #include <string.h> // for memset
++#if ENABLED(TJC_DISPLAY)
++  #include "dwin_text.h"
++#endif
+ 
+ uint8_t DWIN_SendBuf[11 + DWIN_WIDTH / 6 * 2] = { 0xAA };
+ uint8_t DWIN_BufTail[4] = { 0xCC, 0x33, 0xC3, 0x3C };
+@@ -46,7 +55,7 @@ void DWIN_Send(size_t &i) {
+ 
+ // Handshake (1: Success, 0: Fail)
+ bool DWIN_Handshake() {
+-  static int recnum = 0;
++  int recnum = 0;
+   #ifndef LCD_BAUDRATE
+     #define LCD_BAUDRATE 115200
+   #endif
+@@ -57,6 +66,7 @@ bool DWIN_Handshake() {
+   size_t i = 0;
+   DWIN_Byte(i, 0x00);
+   DWIN_Send(i);
++  delay(10); // Allow the panel to send its handshake response.
+ 
+   while (LCD_SERIAL.available() > 0 && recnum < (signed)sizeof(databuf)) {
+     databuf[recnum] = LCD_SERIAL.read();
+@@ -93,16 +103,20 @@ bool DWIN_Handshake() {
+ // Get font character width
+ uint8_t fontWidth(uint8_t cfont) {
+   switch (cfont) {
+-    case font6x12 : return 6;
++    #if DISABLED(TJC_DISPLAY)
++      case font6x12 : return 6;
++    #endif
+     case font8x16 : return 8;
+     case font10x20: return 10;
+     case font12x24: return 12;
+     case font14x28: return 14;
+     case font16x32: return 16;
+-    case font20x40: return 20;
+-    case font24x48: return 24;
+-    case font28x56: return 28;
+-    case font32x64: return 32;
++    #if DISABLED(TJC_DISPLAY)
++      case font20x40: return 20;
++      case font24x48: return 24;
++      case font28x56: return 28;
++      case font32x64: return 32;
++    #endif
+     default: return 0;
+   }
+ }
+@@ -110,16 +124,20 @@ uint8_t fontWidth(uint8_t cfont) {
+ // Get font character height
+ uint8_t fontHeight(uint8_t cfont) {
+   switch (cfont) {
+-    case font6x12 : return 12;
++    #if DISABLED(TJC_DISPLAY)
++      case font6x12 : return 12;
++    #endif
+     case font8x16 : return 16;
+     case font10x20: return 20;
+     case font12x24: return 24;
+     case font14x28: return 28;
+     case font16x32: return 32;
+-    case font20x40: return 40;
+-    case font24x48: return 48;
+-    case font28x56: return 56;
+-    case font32x64: return 64;
++    #if DISABLED(TJC_DISPLAY)
++      case font20x40: return 40;
++      case font24x48: return 48;
++      case font28x56: return 56;
++      case font32x64: return 64;
++    #endif
+     default: return 0;
+   }
+ }
+@@ -234,7 +252,7 @@ void DWIN_Frame_AreaMove(uint8_t mode, uint8_t dir, uint16_t dis,
+ //  *string: The string
+ //  rlimit: To limit the drawn string length
+ void DWIN_Draw_String(bool bShow, uint8_t size, uint16_t color, uint16_t bColor, uint16_t x, uint16_t y, const char * const string, uint16_t rlimit/*=0xFFFF*/) {
+-  #if NONE(DWIN_LCD_PROUI, DWIN_CREALITY_LCD_JYERSUI, IS_DWIN_MARLINUI)
++  #if NONE(TJC_DISPLAY, DWIN_LCD_PROUI, DWIN_CREALITY_LCD_JYERSUI, IS_DWIN_MARLINUI)
+     DWIN_Draw_Rectangle(1, bColor, x, y, x + (fontWidth(size) * strlen_P(string)), y + fontHeight(size));
+   #endif
+   constexpr uint8_t widthAdjust = 0;
+@@ -265,6 +283,11 @@ void DWIN_Draw_String(bool bShow, uint8_t size, uint16_t color, uint16_t bColor,
+ //  value: Integer value
+ void DWIN_Draw_IntValue(uint8_t bShow, bool zeroFill, uint8_t zeroMode, uint8_t size, uint16_t color,
+                           uint16_t bColor, uint8_t iNum, uint16_t x, uint16_t y, uint32_t value) {
++  #if ENABLED(TJC_DISPLAY)
++    char label[32];
++    dwin_text::format(label, sizeof(label), value, false, iNum, 0, zeroFill, zeroMode);
++    DWIN_Draw_String(bShow, size, color, bColor, x, y, label);
++  #else
+   size_t i = 0;
+   #if DISABLED(DWIN_CREALITY_LCD_JYERSUI)
+     DWIN_Draw_Rectangle(1, bColor, x, y, x + fontWidth(size) * iNum + 1, y + fontHeight(size));
+@@ -299,6 +322,7 @@ void DWIN_Draw_IntValue(uint8_t bShow, bool zeroFill, uint8_t zeroMode, uint8_t
+   #endif
+ 
+   DWIN_Send(i);
++  #endif
+ }
+ 
+ // Draw a floating point number
+@@ -314,6 +338,13 @@ void DWIN_Draw_IntValue(uint8_t bShow, bool zeroFill, uint8_t zeroMode, uint8_t
+ //  value: Float value
+ void DWIN_Draw_FloatValue(uint8_t bShow, bool zeroFill, uint8_t zeroMode, uint8_t size, uint16_t color,
+                           uint16_t bColor, uint8_t iNum, uint8_t fNum, uint16_t x, uint16_t y, int32_t value) {
++  #if ENABLED(TJC_DISPLAY)
++    char label[32];
++    // Widen before negating, including INT32_MIN. Values arrive pre-scaled.
++    const uint32_t magnitude = value < 0 ? uint32_t(-int64_t(value)) : uint32_t(value);
++    dwin_text::format(label, sizeof(label), magnitude, value < 0, iNum, fNum, zeroFill, zeroMode);
++    DWIN_Draw_String(bShow, size, color, bColor, x, y, label);
++  #else
+   //uint8_t *fvalue = (uint8_t*)&value;
+   size_t i = 0;
+   #if DISABLED(DWIN_CREALITY_LCD_JYERSUI)
+@@ -335,6 +366,7 @@ void DWIN_Draw_FloatValue(uint8_t bShow, bool zeroFill, uint8_t zeroMode, uint8_
+   DWIN_Byte(i, fvalue[0]);
+   */
+   DWIN_Send(i);
++  #endif
+ }
+ 
+ // Draw a floating point number
+diff --git a/Marlin/src/lcd/e3v2/common/dwin_api.h b/Marlin/src/lcd/e3v2/common/dwin_api.h
+index 3ef20f0..24ab9de 100644
+--- a/Marlin/src/lcd/e3v2/common/dwin_api.h
++++ b/Marlin/src/lcd/e3v2/common/dwin_api.h
+@@ -21,7 +21,9 @@
+  */
+ #pragma once
+ 
+-#include "../../../inc/MarlinConfig.h"
++#ifndef DWIN_API_HOST
++  #include "../../../inc/MarlinConfig.h"
++#endif
+ 
+ #if ENABLED(DWIN_MARLINUI_LANDSCAPE)
+   #define DWIN_WIDTH  480
+diff --git a/Marlin/src/lcd/e3v2/common/dwin_color.h b/Marlin/src/lcd/e3v2/common/dwin_color.h
+index ad01fb0..9a2e5ca 100644
+--- a/Marlin/src/lcd/e3v2/common/dwin_color.h
++++ b/Marlin/src/lcd/e3v2/common/dwin_color.h
+@@ -42,3 +42,17 @@
+ #define Percent_Color       0xFE29  // Percentage color
+ #define BarFill_Color       0x10E4  // Fill color of progress bar
+ #define Select_Color        0x33BB  // Selected color
++
++#if ENABLED(SMART_BED_TRAMMING)
++  #include "jnp_theme.h"
++  #undef Color_Bg_Blue
++  #undef Color_Bg_Black
++  #undef Color_White
++  #undef Select_Color
++  #undef Rectangle_Color
++  #define Color_Bg_Blue jnp_theme::title
++  #define Color_Bg_Black jnp_theme::background
++  #define Color_White jnp_theme::ink
++  #define Select_Color jnp_theme::panel
++  #define Rectangle_Color jnp_theme::accent
++#endif
+diff --git a/Marlin/src/lcd/e3v2/common/dwin_text.h b/Marlin/src/lcd/e3v2/common/dwin_text.h
+new file mode 100644
+index 0000000..afac08d
+--- /dev/null
++++ b/Marlin/src/lcd/e3v2/common/dwin_text.h
+@@ -0,0 +1,36 @@
++/** Text numbers for TJC panels. SPDX-License-Identifier: GPL-3.0-or-later */
++#pragma once
++#include <stdint.h>
++#include <stdio.h>
++#include <string.h>
++
++namespace dwin_text {
++  // Preserve the existing API's fixed-point units and field alignment without
++  // sending its 0x14 numeric command. No floating-point printf dependency.
++  inline void format(char *out, const size_t capacity, const uint32_t magnitude,
++                     const bool negative, const uint8_t whole_digits, const uint8_t decimals,
++                     const bool pad, const bool zero_pad) {
++    if (!capacity) return;
++    if (decimals > 9 || whole_digits > 10) {
++      snprintf(out, capacity, "?");
++      return;
++    }
++    uint32_t divisor = 1;
++    for (uint8_t n = 0; n < decimals; ++n) divisor *= 10;
++    char digits[24];
++    if (decimals)
++      snprintf(digits, sizeof(digits), "%lu.%0*lu", (unsigned long)(magnitude / divisor),
++               int(decimals), (unsigned long)(magnitude % divisor));
++    else
++      snprintf(digits, sizeof(digits), "%lu", (unsigned long)magnitude);
++    const size_t length = strlen(digits), width = whole_digits + (decimals ? decimals + 1 : 0);
++    const size_t padding = pad && width > length ? width - length : 0;
++    size_t used = 0;
++    // The sign precedes zero padding, but follows space padding.
++    if (negative && zero_pad && used + 1 < capacity) out[used++] = '-';
++    for (size_t n = 0; n < padding && used + 1 < capacity; ++n) out[used++] = zero_pad ? '0' : ' ';
++    if (negative && !zero_pad && used + 1 < capacity) out[used++] = '-';
++    for (size_t n = 0; n < length && used + 1 < capacity; ++n) out[used++] = digits[n];
++    out[used] = '\0';
++  }
++}
+diff --git a/Marlin/src/lcd/e3v2/common/jnp_theme.h b/Marlin/src/lcd/e3v2/common/jnp_theme.h
+new file mode 100644
+index 0000000..aa06435
+--- /dev/null
++++ b/Marlin/src/lcd/e3v2/common/jnp_theme.h
+@@ -0,0 +1,15 @@
++/** Shared LCD palette. SPDX-License-Identifier: GPL-3.0-or-later */
++#pragma once
++#include <stdint.h>
++namespace jnp_theme {
++  constexpr uint16_t background = 0x10E8;
++  constexpr uint16_t panel = 0x29EE;
++  constexpr uint16_t ink = 0xEF9E;
++  constexpr uint16_t muted = 0xA5BA;
++  constexpr uint16_t accent = 0x671F;
++  constexpr uint16_t green = 0x7ED3;
++  constexpr uint16_t yellow = 0xF64E;
++  constexpr uint16_t red = 0xFBD0;
++  constexpr uint16_t title = 0x0BBA;
++  constexpr const char *brand = "JNPCREATES";
++}
+diff --git a/Marlin/src/lcd/e3v2/creality/dwin.cpp b/Marlin/src/lcd/e3v2/creality/dwin.cpp
+index d2e27ee..db8fd8e 100644
+--- a/Marlin/src/lcd/e3v2/creality/dwin.cpp
++++ b/Marlin/src/lcd/e3v2/creality/dwin.cpp
+@@ -30,8 +30,15 @@
+ 
+ #include "dwin.h"
+ 
+-//#define USE_STRING_HEADINGS
+-//#define USE_STRING_TITLES
++#if ENABLED(SMART_BED_TRAMMING)
++  #include "smart_tramming_lcd.h"
++#endif
++
++// Use the native text commands supported by the reported TJC display.
++#if ENABLED(TJC_DISPLAY)
++  #define USE_STRING_HEADINGS
++  #define USE_STRING_TITLES
++#endif
+ 
+ #if DISABLED(PROBE_MANUALLY) && ANY(AUTO_BED_LEVELING_BILINEAR, AUTO_BED_LEVELING_LINEAR, AUTO_BED_LEVELING_3POINT)
+   #define HAS_ONESTEP_LEVELING 1
+@@ -232,6 +239,26 @@ typedef struct { uint16_t x, y[2], w, h; } text_info_t;
+ 
+ void ICON_Button(const bool here, const int iconid, const icon_info_t &ico, const text_info_t (&txt)[2]) {
+   const bool cn = HMI_IsChinese();
++  #if ENABLED(TJC_DISPLAY)
++    if (!cn) {
++      const char *caption = nullptr;
++      switch (iconid) {
++        case ICON_Print_0: caption = "Print"; break;
++        case ICON_Prepare_0: caption = "Prepare"; break;
++        case ICON_Control_0: caption = "Control"; break;
++        case ICON_Info_0: caption = "Info"; break;
++        case ICON_Leveling_0: caption = "Leveling"; break;
++        case ICON_Setup_0: caption = "Tune"; break;
++        case ICON_Pause_0: caption = "Pause"; break;
++        case ICON_Continue_0: caption = "Resume"; break;
++        case ICON_Stop_0: caption = "Stop"; break;
++      }
++      if (caption) {
++        DWIN_Draw_StockButton(here, iconid, ico.x, ico.y, ico.w, ico.h, caption);
++        return;
++      }
++    }
++  #endif
+   DWIN_ICON_Show(ICON, iconid + here, ico.x, ico.y);
+   if (here) DWIN_Draw_Rectangle(0, Color_White, ico.x, ico.y, ico.x + ico.w - 1, ico.y + ico.h - 1);
+   DWIN_Frame_AreaCopy(1, txt[cn].x, txt[cn].y[here], txt[cn].x + txt[cn].w - 1, txt[cn].y[here] + txt[cn].h - 1, ico.x + (ico.w - txt[cn].w) / 2, (ico.y + ico.h - 28) - txt[cn].h/2);
+@@ -465,8 +492,13 @@ void Draw_Back_First(const bool is_sel=true) {
+   Draw_Menu_Line(0, ICON_Back);
+   if (HMI_IsChinese())
+     Item_AreaCopy(129,  72, 156,  84);
+-  else
+-    Item_AreaCopy(223, 179, 254, 189);
++  else {
++    #ifdef USE_STRING_TITLES
++      DWIN_Draw_String(false, font8x16, Color_White, Color_Bg_Black, LBLX, MBASE(0), "Back");
++    #else
++      Item_AreaCopy(223, 179, 254, 189);
++    #endif
++  }
+   if (is_sel) Draw_Menu_Cursor(0);
+ }
+ 
+@@ -532,50 +564,110 @@ void Draw_Back_First(const bool is_sel=true) {
+ //
+ 
+ void say_move_en(const uint8_t row) {
++  #ifdef USE_STRING_TITLES
++    DWIN_Draw_String(false, font8x16, Color_White, Color_Bg_Black, LBLX + 0, MBASE(row), "Move");
++  #else
+   Item_AreaCopy( 69,  61, 102,  71, row);         // "Move"
++  #endif
+ }
+ void say_max_en(const uint8_t row) {
++  #ifdef USE_STRING_TITLES
++    DWIN_Draw_String(false, font8x16, Color_White, Color_Bg_Black, LBLX + 0, MBASE(row), "Max");
++  #else
+   Item_AreaCopy( 75, 119, 100, 129, row);         // "Max"
++  #endif
+ }
+ void say_jerk_en(const uint8_t row) {
++  #ifdef USE_STRING_TITLES
++    DWIN_Draw_String(false, font8x16, Color_White, Color_Bg_Black, LBLX + 30, MBASE(row), "Jerk");
++  #else
+   Item_AreaCopy(104, 119, 128, 129, row, 30);     // "Jerk"
++  #endif
+ }
+ void say_speed_en(const uint16_t inset, const uint8_t row) {
++  #ifdef USE_STRING_TITLES
++    DWIN_Draw_String(false, font8x16, Color_White, Color_Bg_Black, LBLX + inset, MBASE(row), "Speed");
++  #else
+   Item_AreaCopy(133, 119, 172, 132, row, inset);  // "Speed"
++  #endif
+ }
+ void say_max_accel_en(const uint8_t row) {
++  #ifdef USE_STRING_TITLES
++    DWIN_Draw_String(false, font8x16, Color_White, Color_Bg_Black, LBLX + 0, MBASE(row), "Max Acceleration");
++  #else
+    say_max_en(row);                               // "Max"
+    Item_AreaCopy(  0, 135,  79, 145, row, 30);    // "Acceleration"
++  #endif
+ }
+ void say_max_jerk_speed_en(const uint8_t row) {
++  #ifdef USE_STRING_TITLES
++    DWIN_Draw_String(false, font8x16, Color_White, Color_Bg_Black, LBLX + 0, MBASE(row), "Max Jerk Speed");
++  #else
+   Item_AreaCopy( 75, 119, 172, 132, row);         // "Max Jerk Speed"
++  #endif
+ }
+ void say_x_en(const uint16_t inset, const uint8_t row) {
++  #ifdef USE_STRING_TITLES
++    DWIN_Draw_String(false, font8x16, Color_White, Color_Bg_Black, LBLX + inset, MBASE(row), "X");
++  #else
+   Item_AreaCopy(175, 119, 184, 129, row, inset);  // "X"
++  #endif
+ }
+ void say_y_en(const uint16_t inset, const uint8_t row) {
++  #ifdef USE_STRING_TITLES
++    DWIN_Draw_String(false, font8x16, Color_White, Color_Bg_Black, LBLX + inset, MBASE(row), "Y");
++  #else
+   Item_AreaCopy(184, 119, 192, 129, row, inset);  // "Y"
++  #endif
+ }
+ void say_z_en(const uint16_t inset, const uint8_t row) {
++  #ifdef USE_STRING_TITLES
++    DWIN_Draw_String(false, font8x16, Color_White, Color_Bg_Black, LBLX + inset, MBASE(row), "Z");
++  #else
+   Item_AreaCopy(193, 119, 201, 129, row, inset);  // "Z"
++  #endif
+ }
+ void say_e_en(const uint16_t inset, const uint8_t row) {
++  #ifdef USE_STRING_TITLES
++    DWIN_Draw_String(false, font8x16, Color_White, Color_Bg_Black, LBLX + inset, MBASE(row), "E");
++  #else
+   Item_AreaCopy(201, 119, 209, 129, row, inset);  // "E"
++  #endif
+ }
+ void say_pla_en(const uint16_t inset, const uint8_t row) {
++  #ifdef USE_STRING_TITLES
++    DWIN_Draw_String(false, font8x16, Color_White, Color_Bg_Black, LBLX + inset, MBASE(row), "PLA");
++  #else
+   Item_AreaCopy(131, 164, 153, 174, row, inset);  // "PLA"
++  #endif
+ }
+ void say_abs_en(const uint16_t inset, const uint8_t row) {
++  #ifdef USE_STRING_TITLES
++    DWIN_Draw_String(false, font8x16, Color_White, Color_Bg_Black, LBLX + inset, MBASE(row), "ABS");
++  #else
+   Item_AreaCopy(157,  76, 181,  86, row, inset);  // "ABS"
++  #endif
+ }
+ void say_home_offs_en(const uint8_t row) {
++  #ifdef USE_STRING_TITLES
++    DWIN_Draw_String(false, font8x16, Color_White, Color_Bg_Black, LBLX + 0, MBASE(row), "Home Offset");
++  #else
+   Item_AreaCopy(153, 193, 225, 203, row);         // "Home Offset"
++  #endif
+ }
+ void say_probe_offs_en(const uint8_t row) {
++  #ifdef USE_STRING_TITLES
++    DWIN_Draw_String(false, font8x16, Color_White, Color_Bg_Black, LBLX + 0, MBASE(row), "Probe Offset");
++  #else
+   Item_AreaCopy(153, 205, 225, 215, row);         // "Probe Offset"
++  #endif
+ }
+ void say_steps_per_mm_en(const uint8_t row) {
++  #ifdef USE_STRING_TITLES
++    DWIN_Draw_String(false, font8x16, Color_White, Color_Bg_Black, LBLX + 0, MBASE(row), "Steps/mm");
++  #else
+   Item_AreaCopy(  1, 151,  91, 161, row);         // "Steps-per-mm"
++  #endif
+ }
+ 
+ void DWIN_Draw_Label(const uint8_t row, char *string) {
+@@ -784,6 +876,7 @@ void Draw_Prepare_Menu() {
+   #endif
+   if (PVISI(PREPARE_CASE_LANG)) Item_Prepare_Lang(PSCROL(PREPARE_CASE_LANG));     // Language CN/EN
+ 
++
+   if (select_prepare.now != CASE_BACK) Draw_Menu_Cursor(PSCROL(select_prepare.now));
+ }
+ 
+@@ -1100,6 +1193,27 @@ void Draw_Motion_Menu() {
+ 
+ #endif
+ 
++// JNP: the stock Confirm/Cancel/Continue images have their text baked into the picture,
++// which the TJC panel does not show correctly. Draw a plain text button there instead
++// (same size/position, so selection highlights and click handling are unchanged).
++void Show_TextButton(const uint8_t icon, const uint16_t x, const uint16_t y) {
++  #if ENABLED(TJC_DISPLAY)
++    const char *caption = nullptr;
++    switch (icon) {
++      case ICON_Confirm_E: case ICON_Confirm_C: caption = "Confirm"; break;
++      case ICON_Cancel_E: case ICON_Cancel_C: caption = "Cancel"; break;
++      case ICON_Continue_E: case ICON_Continue_C: caption = "Continue"; break;
++      default: break;
++    }
++    if (caption) {
++      DWIN_Draw_Rectangle(1, Color_Bg_Blue, x, y, x + 99, y + 37);
++      DWIN_Draw_String(false, font8x16, Color_White, Color_Bg_Blue, x + (100 - strlen(caption) * 8) / 2, y + 11, caption);
++      return;
++    }
++  #endif
++  DWIN_ICON_Show(ICON, icon, x, y);
++}
++
+ void Draw_Popup_Bkgd_60() {
+   DWIN_Draw_Rectangle(1, Color_Bg_Window, 14, 60, 258, 330);
+ }
+@@ -1113,11 +1227,11 @@ void Draw_Popup_Bkgd_60() {
+     if (HMI_IsChinese()) {
+       DWIN_Frame_AreaCopy(1, 103, 371, 136, 386, 69, 240);      // Nozzle Too Cold
+       DWIN_Frame_AreaCopy(1, 170, 371, 270, 386, 69 + 33, 240);
+-      DWIN_ICON_Show(ICON, ICON_Confirm_C, 86, 280);
++      Show_TextButton(ICON_Confirm_C, 86, 280);
+     }
+     else {
+       DWIN_Draw_String(true, font8x16, Popup_Text_Color, Color_Bg_Window, 20, 235, F("Nozzle is too cold"));
+-      DWIN_ICON_Show(ICON, ICON_Confirm_E, 86, 280);
++      Show_TextButton(ICON_Confirm_E, 86, 280);
+     }
+   }
+ 
+@@ -1129,15 +1243,15 @@ void Popup_Window_Resume() {
+   if (HMI_IsChinese()) {
+     DWIN_Frame_AreaCopy(1, 160, 338, 235, 354, 98, 135);    // Resume Interrupted Print
+     DWIN_Frame_AreaCopy(1, 103, 321, 271, 335, 52, 192);
+-    DWIN_ICON_Show(ICON, ICON_Cancel_C,    26, 307);
+-    DWIN_ICON_Show(ICON, ICON_Continue_C, 146, 307);
++    Show_TextButton(ICON_Cancel_C, 26, 307);
++    Show_TextButton(ICON_Continue_C, 146, 307);
+   }
+   else {
+     DWIN_Draw_String(true, font8x16, Popup_Text_Color, Color_Bg_Window, (272 - 8 * 14) / 2, 115, F("Continue Print"));
+     DWIN_Draw_String(true, font8x16, Popup_Text_Color, Color_Bg_Window, (272 - 8 * 22) / 2, 192, F("It looks like the last"));
+     DWIN_Draw_String(true, font8x16, Popup_Text_Color, Color_Bg_Window, (272 - 8 * 22) / 2, 212, F("file was interrupted."));
+-    DWIN_ICON_Show(ICON, ICON_Cancel_E,    26, 307);
+-    DWIN_ICON_Show(ICON, ICON_Continue_E, 146, 307);
++    Show_TextButton(ICON_Cancel_E, 26, 307);
++    Show_TextButton(ICON_Continue_E, 146, 307);
+   }
+ }
+ 
+@@ -1191,14 +1305,14 @@ void Popup_window_PauseOrStop() {
+          if (select_print.now == PRINT_PAUSE_RESUME) DWIN_Frame_AreaCopy(1, 237, 338, 269, 356, 98, 150);    // Pause
+     else if (select_print.now == PRINT_STOP) DWIN_Frame_AreaCopy(1, 221, 320, 253, 336, 98, 150);    // Stop
+     DWIN_Frame_AreaCopy(1, 220, 304, 264, 319, 130, 150); // Print
+-    DWIN_ICON_Show(ICON, ICON_Confirm_C, 26, 280);
+-    DWIN_ICON_Show(ICON, ICON_Cancel_C, 146, 280);
++    Show_TextButton(ICON_Confirm_C, 26, 280);
++    Show_TextButton(ICON_Cancel_C, 146, 280);
+   }
+   else {
+          if (select_print.now == PRINT_PAUSE_RESUME) DWIN_Draw_String(true, font8x16, Popup_Text_Color, Color_Bg_Window, (272 - 8 * 11) / 2, 150, GET_TEXT_F(MSG_PAUSE_PRINT));
+     else if (select_print.now == PRINT_STOP) DWIN_Draw_String(true, font8x16, Popup_Text_Color, Color_Bg_Window, (272 - 8 * 10) / 2, 150, GET_TEXT_F(MSG_STOP_PRINT));
+-    DWIN_ICON_Show(ICON, ICON_Confirm_E, 26, 280);
+-    DWIN_ICON_Show(ICON, ICON_Cancel_E, 146, 280);
++    Show_TextButton(ICON_Confirm_E, 26, 280);
++    Show_TextButton(ICON_Cancel_E, 146, 280);
+   }
+   Draw_Select_Highlight(true);
+ }
+@@ -1272,13 +1386,20 @@ void Goto_MainMenu() {
+     DWIN_Frame_TitleCopy(2, 2, 26, 13);   // "Home" etc
+   else {
+     #ifdef USE_STRING_HEADINGS
+-      Draw_Title(GET_TEXT_F(MSG_MAIN_MENU));
++      // JNP: brand centered in the title bar (10 chars x 10 px)
++      DWIN_Draw_String(false, DWIN_FONT_HEAD, Color_White, Color_Bg_Blue, (DWIN_WIDTH - 10 * 10) / 2, 4, F("JNPCREATES"));
+     #else
+       DWIN_Frame_TitleCopy(0, 2, 40, 11); // "Home"
+     #endif
+   }
+ 
+-  DWIN_ICON_Show(ICON, ICON_LOGO, 71, 52);
++  #if ENABLED(SMART_BED_TRAMMING)
++    // JNP: brand where the Creality logo was, machine name underneath (centered)
++    DWIN_Draw_String(false, font10x20, Color_White, Color_Bg_Black, (DWIN_WIDTH - 10 * 10) / 2, 52, F("JNPCREATES"));
++    DWIN_Draw_String(false, font8x16, Color_White, Color_Bg_Black, (DWIN_WIDTH - 14 * 8) / 2, 80, F("ENDER-3 V2 NEO"));
++  #else
++    DWIN_ICON_Show(ICON, ICON_LOGO, 71, 52);
++  #endif
+ 
+   ICON_Print();
+   ICON_Prepare();
+@@ -2047,9 +2168,15 @@ void Draw_Info_Menu() {
+       DWIN_Frame_TitleCopy(192, 15, 23, 12);                // "Info"
+     #endif
+ 
++    #ifdef USE_STRING_TITLES
++      DWIN_Draw_String(false, font8x16, Color_White, Color_Bg_Black, 120, 102, "Size");
++      DWIN_Draw_String(false, font8x16, Color_White, Color_Bg_Black, 72, 175, "Firmware Version");
++      DWIN_Draw_String(false, font8x16, Color_White, Color_Bg_Black, (DWIN_WIDTH - 10 * 8) / 2, 248, "JNPCREATES");
++    #else
+     DWIN_Frame_AreaCopy(1, 120, 150, 146, 161, 124, 102);   // "Size"
+     DWIN_Frame_AreaCopy(1, 146, 151, 254, 161,  82, 175);   // "Firmware Version"
+     DWIN_Frame_AreaCopy(1,   1, 164,  96, 175,  89, 248);   // "Contact details"
++    #endif
+   }
+   DWIN_Draw_String(false, font8x16, Color_White, Color_Bg_Black, (DWIN_WIDTH - strlen(CORP_WEBSITE) * MENU_CHR_W) / 2, 268, F(CORP_WEBSITE));
+ 
+@@ -2123,7 +2250,9 @@ void HMI_MainMenu() {
+         break;
+ 
+       case PAGE_INFO_LEVELING:
+-        #if HAS_ONESTEP_LEVELING
++        #if ENABLED(SMART_BED_TRAMMING)
++          SmartTramming_MenuOpen();
++        #elif HAS_ONESTEP_LEVELING
+           checkkey = Leveling;
+           HMI_Leveling();
+         #else
+@@ -2230,27 +2359,13 @@ void HMI_SelectFile() {
+         goto HMI_SelectFileExit;
+       }
+ 
+-      // Reset highlight for next entry
+-      select_print.reset();
+-      select_file.reset();
+-
+-      // Start choice and print SD file
+-      HMI_flag.heat_flag = true;
+-      HMI_flag.print_finish = false;
+-      HMI_ValueStruct.show_mode = 0;
+-
+-      card.openAndPrintFile(card.filename);
+-
+-      #if HAS_FAN
+-        // All fans on for Ender-3 v2 ?
+-        // The slicer should manage this for us.
+-        //for (uint8_t i = 0; i < FAN_COUNT; i++)
+-        //  thermalManager.fan_speed[i] = 255;
++      #if ENABLED(SMART_BED_TRAMMING)
++        // JNP: ask before printing, like the stock Creality firmware
++        checkkey = PrintConfirm;
++        Popup_Window_PrintConfirm();
++      #else
++        Start_Selected_Print();
+       #endif
+-
+-      _card_percent = 0;
+-      _remain_time = 0;
+-      Goto_PrintProcess();
+     }
+   }
+ 
+@@ -2258,6 +2373,57 @@ void HMI_SelectFile() {
+     DWIN_UpdateLCD();
+ }
+ 
++// Start printing the file currently selected on the SD card (card.filename)
++void Start_Selected_Print() {
++  // Reset highlight for next entry
++  select_print.reset();
++  select_file.reset();
++
++  // Start choice and print SD file
++  HMI_flag.heat_flag = true;
++  HMI_flag.print_finish = false;
++  HMI_ValueStruct.show_mode = 0;
++
++  card.openAndPrintFile(card.filename);
++
++  _card_percent = 0;
++  _remain_time = 0;
++  Goto_PrintProcess();
++}
++
++#if ENABLED(SMART_BED_TRAMMING)
++  // "Print this file?" -- Print (left, default) / Cancel (right)
++  void Popup_Window_PrintConfirm() {
++    Clear_Main_Window();
++    Draw_Title(F("Print file"));
++    Draw_Popup_Bkgd_60();
++    DWIN_Draw_String(false, font8x16, Popup_Text_Color, Color_Bg_Window, (272 - 8 * 16) / 2, 110, F("Print this file?"));
++    char name[30];
++    const char * const longname = card.longest_filename();
++    strncpy(name, longname, sizeof(name) - 1); name[sizeof(name) - 1] = 0;
++    if (strlen(longname) > sizeof(name) - 1) { name[sizeof(name) - 4] = '.'; name[sizeof(name) - 3] = '.'; name[sizeof(name) - 2] = '.'; }
++    DWIN_Draw_String(false, font8x16, Color_White, Color_Bg_Window, _MAX(16, (272 - int(strlen(name)) * 8) / 2), 160, name);
++    DWIN_Draw_Rectangle(1, Color_Bg_Blue, 26, 280, 125, 317);
++    DWIN_Draw_String(false, font8x16, Color_White, Color_Bg_Blue, 26 + (100 - 5 * 8) / 2, 291, F("Print"));
++    DWIN_Draw_Rectangle(1, Color_Bg_Blue, 146, 280, 245, 317);
++    DWIN_Draw_String(false, font8x16, Color_White, Color_Bg_Blue, 146 + (100 - 6 * 8) / 2, 291, F("Cancel"));
++    Draw_Select_Highlight(true);
++    DWIN_UpdateLCD();
++  }
++
++  void HMI_PrintConfirm() {
++    EncoderState encoder_diffState = get_encoder_state();
++    if (encoder_diffState == ENCODER_DIFF_NO) return;
++    if (encoder_diffState == ENCODER_DIFF_CW) Draw_Select_Highlight(false);
++    else if (encoder_diffState == ENCODER_DIFF_CCW) Draw_Select_Highlight(true);
++    else if (encoder_diffState == ENCODER_DIFF_ENTER) {
++      if (HMI_flag.select_flag) Start_Selected_Print();
++      else { checkkey = SelectFile; Draw_Print_File_Menu(); }   // back to the same place in the list
++    }
++    DWIN_UpdateLCD();
++  }
++#endif
++
+ // Printing
+ void HMI_Printing() {
+   EncoderState encoder_diffState = get_encoder_state();
+@@ -2638,6 +2804,25 @@ void HMI_Prepare() {
+   EncoderState encoder_diffState = get_encoder_state();
+   if (encoder_diffState == ENCODER_DIFF_NO) return;
+ 
++  #if ENABLED(SMART_BED_TRAMMING)
++    // The stock incremental scroll assumes a fixed set of Prepare rows.
++    // Redraw scrolled rows from the common menu definition for the added item.
++    if (encoder_diffState == ENCODER_DIFF_CW || encoder_diffState == ENCODER_DIFF_CCW) {
++      const uint8_t old = select_prepare.now;
++      if (encoder_diffState == ENCODER_DIFF_CW) select_prepare.inc(1 + PREPARE_CASE_TOTAL);
++      else select_prepare.dec();
++      if (old != select_prepare.now) {
++        const uint8_t old_index = index_prepare;
++        if (select_prepare.now > index_prepare) index_prepare = select_prepare.now;
++        else if (select_prepare.now + MROWS < index_prepare) index_prepare = select_prepare.now + MROWS;
++        if (index_prepare != old_index) Draw_Prepare_Menu();
++        else Move_Highlight(encoder_diffState == ENCODER_DIFF_CW ? 1 : -1, select_prepare.now + MROWS - index_prepare);
++        DWIN_UpdateLCD();
++      }
++      return;
++    }
++  #endif
++
+   // Avoid flicker by updating only the previous menu
+   if (encoder_diffState == ENCODER_DIFF_CW) {
+     if (select_prepare.inc(1 + PREPARE_CASE_TOTAL)) {
+@@ -2750,6 +2935,7 @@ void HMI_Prepare() {
+         Draw_Prepare_Menu();
+         break;
+ 
++
+       default: break;
+     }
+   }
+@@ -2943,7 +3129,8 @@ void HMI_Control() {
+   void HMI_Leveling() {
+     Popup_Window_Leveling();
+     DWIN_UpdateLCD();
+-    queue.inject(F("G28O\nG29"));
++    // JNP: save the new mesh so it survives a power cycle (stock UI left it in RAM only)
++    queue.inject(F("G28O\nG29" TERN_(EEPROM_SETTINGS, "\nM500")));
+   }
+ #endif
+ 
+@@ -4074,6 +4261,9 @@ void DWIN_Update() {
+   EachMomentUpdate();   // Status update
+   HMI_SDCardUpdate();   // SD card update
+   DWIN_HandleScreen();  // Rotary encoder update
++  #if ENABLED(SMART_BED_TRAMMING)
++    SmartTramming_RenderTick(); // One paced drawing operation; never idle()/reenter the UI.
++  #endif
+ }
+ 
+ void EachMomentUpdate() {
+@@ -4098,13 +4288,14 @@ void EachMomentUpdate() {
+ 
+       planner.finish_and_disable();
+ 
+-      // show percent bar and value
+-      _card_percent = 0;
++      // show percent bar and value (JNP: finished = 100%, stock showed 0%)
++      _card_percent = 100;
+       Draw_Print_ProgressBar();
++      _card_percent = 0;
+ 
+-      // show print done confirm
+-      DWIN_Draw_Rectangle(1, Color_Bg_Black, 0, 250, DWIN_WIDTH - 1, STATUS_Y);
+-      DWIN_ICON_Show(ICON, HMI_IsChinese() ? ICON_Confirm_C : ICON_Confirm_E, 86, 283);
++      // show print done confirm (JNP: clear from y=232, where the Tune/Pause/Stop row starts)
++      DWIN_Draw_Rectangle(1, Color_Bg_Black, 0, 232, DWIN_WIDTH - 1, STATUS_Y - 1);
++      Show_TextButton(HMI_IsChinese() ? ICON_Confirm_C : ICON_Confirm_E, 86, 283);
+     }
+     else if (HMI_flag.pause_flag != printingIsPaused()) {
+       // print status update
+@@ -4213,8 +4404,14 @@ void EachMomentUpdate() {
+ 
+ void DWIN_HandleScreen() {
+   switch (checkkey) {
++    #if ENABLED(SMART_BED_TRAMMING)
++      case SmartTramming: SmartTramming_Update(); break;
++    #endif
+     case MainMenu:        HMI_MainMenu(); break;
+     case SelectFile:      HMI_SelectFile(); break;
++    #if ENABLED(SMART_BED_TRAMMING)
++      case PrintConfirm:  HMI_PrintConfirm(); break;
++    #endif
+     case Prepare:         HMI_Prepare(); break;
+     case Control:         HMI_Control(); break;
+     case Leveling:        break;
+@@ -4292,7 +4489,18 @@ void DWIN_HomingDone() {
+   }
+ }
+ 
++#if ENABLED(SMART_BED_TRAMMING)
++  void SmartTramming_Return() {
++    select_page.set(PAGE_INFO_LEVELING);
++    Goto_MainMenu();
++    DWIN_UpdateLCD();
++  }
++#endif
++
+ void DWIN_LevelingDone() {
++  #if ENABLED(SMART_BED_TRAMMING)
++    if (SmartMesh_Done()) return;   // Mesh viewer stays up with the final grid
++  #endif
+   if (checkkey == Leveling) Goto_MainMenu();
+ }
+ 
+diff --git a/Marlin/src/lcd/e3v2/creality/dwin.h b/Marlin/src/lcd/e3v2/creality/dwin.h
+index 487f309..1ce2b1c 100644
+--- a/Marlin/src/lcd/e3v2/creality/dwin.h
++++ b/Marlin/src/lcd/e3v2/creality/dwin.h
+@@ -96,6 +96,10 @@ enum processID : uint8_t {
+   // Window ID
+   Print_window,
+   Popup_Window
++  #if ENABLED(SMART_BED_TRAMMING)
++    , SmartTramming
++    , PrintConfirm   // JNP: "Print this file?" popup before a print starts
++  #endif
+ };
+ 
+ extern uint8_t checkkey;
+@@ -215,6 +219,11 @@ void Draw_Status_Area(const bool with_update); // Status Area
+ void HMI_StartFrame(const bool with_update);   // Prepare the menu view
+ void HMI_MainMenu();    // Main process screen
+ void HMI_SelectFile();  // File page
++#if ENABLED(SMART_BED_TRAMMING)
++  void HMI_PrintConfirm();
++  void Popup_Window_PrintConfirm();
++  void Start_Selected_Print();
++#endif
+ void HMI_Printing();    // Print page
+ void HMI_Prepare();     // Prepare page
+ void HMI_Control();     // Control page
+diff --git a/Marlin/src/lcd/e3v2/creality/dwin_lcd.cpp b/Marlin/src/lcd/e3v2/creality/dwin_lcd.cpp
+index 3d60e32..f9b70f9 100644
+--- a/Marlin/src/lcd/e3v2/creality/dwin_lcd.cpp
++++ b/Marlin/src/lcd/e3v2/creality/dwin_lcd.cpp
+@@ -28,16 +28,24 @@
+  * @brief    DWIN screen control functions
+  ********************************************************************************/
+ 
+-#include "../../../inc/MarlinConfigPre.h"
++#ifdef DWIN_API_HOST
++  #include "../../../../../tests/dwin_api_mocks.h"
++#else
++  #include "../../../inc/MarlinConfigPre.h"
++#endif
+ 
+ #if ENABLED(DWIN_CREALITY_LCD)
+ 
+-#include "../../../inc/MarlinConfig.h"
++#ifndef DWIN_API_HOST
++  #include "../../../inc/MarlinConfig.h"
++#endif
+ 
+ #include "dwin_lcd.h"
+ 
+ //#define DEBUG_OUT 1
+-#include "../../../core/debug_out.h"
++#ifndef DWIN_API_HOST
++  #include "../../../core/debug_out.h"
++#endif
+ 
+ /*-------------------------------------- System variable function --------------------------------------*/
+ 
+@@ -49,10 +57,23 @@ void DWIN_Startup() {
+   #if DISABLED(SHOW_BOOTSCREEN)
+     DWIN_Frame_Clear(Color_Bg_Black); // MarlinUI handles the bootscreen so just clear here
+   #endif
+-  DWIN_JPG_ShowAndCache(3);
++  #if DISABLED(TJC_DISPLAY)
++    DWIN_JPG_ShowAndCache(3);
++  #endif
+   DWIN_UpdateLCD();
+ }
+ 
++#if ENABLED(TJC_DISPLAY)
++  void DWIN_Draw_StockButton(const bool selected, const uint8_t icon, const uint16_t x, const uint16_t y,
++                            const uint16_t width, const uint16_t height, const char *caption) {
++    DWIN_ICON_Show(ICON, icon + selected, x, y);
++    if (selected) DWIN_Draw_Rectangle(0, Color_White, x, y, x + width - 1, y + height - 1);
++    const uint16_t length = strlen(caption) * 8;
++    DWIN_Draw_String(false, font8x16, Color_White, Color_Bg_Black,
++                     x + (width > length ? (width - length) / 2 : 0), y + height - 28, caption);
++  }
++#endif
++
+ /*---------------------------------------- Picture related functions ----------------------------------------*/
+ 
+ // Draw an Icon
+diff --git a/Marlin/src/lcd/e3v2/creality/dwin_lcd.h b/Marlin/src/lcd/e3v2/creality/dwin_lcd.h
+index b37a659..fc282dd 100644
+--- a/Marlin/src/lcd/e3v2/creality/dwin_lcd.h
++++ b/Marlin/src/lcd/e3v2/creality/dwin_lcd.h
+@@ -39,6 +39,12 @@
+ #define DWIN_FONT_HEAD  font10x20
+ #define DWIN_FONT_ALERT font14x28
+ 
++#if ENABLED(TJC_DISPLAY)
++  // Factory icon plus a native text caption, independent of language bitmaps.
++  void DWIN_Draw_StockButton(bool selected, uint8_t icon, uint16_t x, uint16_t y,
++                            uint16_t width, uint16_t height, const char *caption);
++#endif
++
+ // Copy area from virtual display area to current screen
+ //  cacheID: virtual area number
+ //  xStart/yStart: Upper-left of virtual area
+diff --git a/Marlin/src/lcd/e3v2/creality/smart_tramming_lcd.cpp b/Marlin/src/lcd/e3v2/creality/smart_tramming_lcd.cpp
+new file mode 100644
+index 0000000..6eafd0b
+--- /dev/null
++++ b/Marlin/src/lcd/e3v2/creality/smart_tramming_lcd.cpp
+@@ -0,0 +1,292 @@
++/** Independent leveling menu and LCD adapter. SPDX-License-Identifier: GPL-3.0-or-later */
++#ifdef SMART_TRAMMING_LCD_HOST
++  #include "../../../../../tests/smart_tramming_lcd_mocks.h"
++#else
++  #include "../../../inc/MarlinConfig.h"
++#endif
++#if ALL(SMART_BED_TRAMMING, DWIN_CREALITY_LCD)
++#include "smart_tramming_lcd.h"
++#ifndef SMART_TRAMMING_LCD_HOST
++  #include "dwin.h"
++  #include "../../../module/settings.h"
++  #include "../../../gcode/queue.h"
++  #include "../../../feature/bedlevel/bedlevel.h"
++  #include "../../../module/planner.h"
++  #include "../../../module/motion.h"
++  #include "../../marlinui.h"
++  #define SMART_MESH_VIEW 1   // Live / saved mesh viewer (firmware only; not in host tests)
++#endif
++#include "../../../feature/smart_tramming.h"
++#include "../../../feature/smart_tramming_view.h"
++#include "../../../feature/smart_tramming_draw.h"
++#include "../common/jnp_theme.h"
++#include <stdio.h>
++
++namespace {
++  enum class Page : uint8_t { Menu, Paper, Dashboard, Mesh };
++  Page page = Page::Menu;
++  bool dashboard_on_screen = false;   // true while the last complete frame was the dashboard
++  uint8_t selected = 0;
++  uint16_t drawn_revision = 0;
++  smart_tramming::Stage drawn_stage = smart_tramming::Stage::Ready;
++  const char *notice = "Probe the four knob corners";
++  constexpr uint16_t bg=jnp_theme::background, ink=jnp_theme::ink;
++  smart_tramming::DrawQueue drawing;
++  uint32_t next_draw_ms=0;
++  uint8_t uncommitted=0;
++
++  void rectangle(const bool fill, const uint16_t color, const uint16_t x0,
++                 const uint16_t y0, const uint16_t x1, const uint16_t y1) {
++    drawing.add(smart_tramming::DrawCommand::Rectangle,fill,color,x0,y0,x1,y1);
++  }
++  void text(const uint16_t color, const uint16_t x, const uint16_t y, const char *label) {
++    drawing.add(smart_tramming::DrawCommand::Text,false,color,x,y,0,0,label);
++  }
++  void line(const uint16_t color, const uint16_t x0, const uint16_t y0, const uint16_t x1, const uint16_t y1) {
++    drawing.add(smart_tramming::DrawCommand::Line,false,color,x0,y0,x1,y1);
++  }
++  const smart_tramming::Surface surface { rectangle, text, line };
++  smart_tramming::ViewSettings view_settings() {
++    return { SMART_TRAMMING_TOLERANCE_MM, smart_tramming::points_reachable(),
++      bool(SMART_TRAMMING_DIRECTION_CONFIRMED), bool(SMART_TRAMMING_CW_RAISES_BED) };
++  }
++  void header(const char *title) {
++    rectangle(true,bg,0,0,271,353); rectangle(true,jnp_theme::title,0,0,271,30); text(ink,12,7,title);
++  }
++  #if SMART_MESH_VIEW
++    // ---- Bed mesh viewer: back of the bed at the top, like the tramming page ----
++    constexpr uint8_t MX=GRID_MAX_POINTS_X, MY=GRID_MAX_POINTS_Y;
++    constexpr uint16_t GX=10, GY=74, GW=252, GH=190, CW=GW/MX, CH=GH/MY;
++    float mesh_z[MX][MY];
++    uint8_t mesh_count=0;
++    bool mesh_running=false;
++
++    // "+0.12" / "-0.05" without printf float support
++    void fmt2(char *buf,const size_t size,const float v) {
++      if(!isfinite(v)){snprintf(buf,size,"--");return;}
++      const long n=_MIN(lroundf(fabsf(v)*100),9999L);   // Mesh values are far below 99.99 mm
++      snprintf(buf,size,"%c%ld.%02ld",v<-0.005f?'-':'+',n/100,n%100);
++    }
++    uint16_t mesh_color(const float z) {
++      if(!isfinite(z))return jnp_theme::panel;
++      const float a=fabsf(z);
++      return a<=0.05f?jnp_theme::green:a<=0.10f?jnp_theme::yellow:jnp_theme::red;
++    }
++    void mesh_cell(const uint8_t x,const uint8_t y) {
++      const uint16_t x0=GX+x*CW, y0=GY+(MY-1-y)*CH;
++      const float z=mesh_z[x][y];
++      rectangle(true,mesh_color(z),x0+1,y0+1,x0+CW-2,y0+CH-2);
++      if(isfinite(z)){char v[12];fmt2(v,sizeof(v),z);text(bg,x0+(CW-strlen(v)*8)/2,y0+(CH-16)/2,v);}
++    }
++    void mesh_footer() {
++      char label[40];
++      rectangle(true,bg,0,284,271,353);
++      if(mesh_running) {
++        if(mesh_count==0)snprintf(label,sizeof(label),"%s",smart_tramming::heat_before_level?"Heating bed, then homing":"Homing");
++        else snprintf(label,sizeof(label),"Probing %u/%u",unsigned(mesh_count),unsigned(MX*MY));
++        text(jnp_theme::accent,12,290,label);
++      }
++      else {
++        text(jnp_theme::muted,12,290,leveling_is_valid()?"Mesh saved and active":"No valid mesh");
++        rectangle(true,jnp_theme::accent,76,319,195,349);text(bg,84,326,"Done");
++      }
++    }
++    void draw_mesh() {
++      header(mesh_running?"Auto Mesh":"Bed Mesh");
++      float lo=NAN,hi=NAN;
++      for(uint8_t x=0;x<MX;x++)for(uint8_t y=0;y<MY;y++){
++        const float z=mesh_z[x][y];
++        if(!isfinite(z))continue;
++        if(!isfinite(lo)||z<lo)lo=z;
++        if(!isfinite(hi)||z>hi)hi=z;
++      }
++      char label[48],a[12],b[12],r[12];
++      if(isfinite(lo)){fmt2(a,sizeof(a),lo);fmt2(b,sizeof(b),hi);fmt2(r,sizeof(r),hi-lo);
++        snprintf(label,sizeof(label),"Min %s  Max %s",a,b);text(ink,12,36,label);
++        snprintf(label,sizeof(label),"Range %s mm",r+1);text(jnp_theme::muted,12,54,label);}
++      else text(jnp_theme::muted,12,36,"Waiting for the first point");
++      for(uint8_t x=0;x<MX;x++)for(uint8_t y=0;y<MY;y++)mesh_cell(x,y);
++      text(jnp_theme::muted,(272-5*8)/2,GY+GH+2,"FRONT");
++      mesh_footer();
++    }
++    void mesh_load_saved() {
++      const bool ok=leveling_is_valid();
++      for(uint8_t x=0;x<MX;x++)for(uint8_t y=0;y<MY;y++)mesh_z[x][y]=ok?bedlevel.z_values[x][y]:NAN;
++    }
++
++    // Queue a short G-code sequence without blocking the LCD loop. Coordinates given
++    // here are machine (native) positions; G-code uses logical ones (home offset).
++    bool send_gcode(const char *cmd) {
++      if(queue.has_commands_queued()||planner.has_blocks_queued()){notice="Busy - try again in a moment";return false;}
++      queue.inject(cmd); return true;
++    }
++    // Paper leveling: nozzle over a knob (the tramming spots), mesh off, lowered to Z0
++    void paper_move(const float nx,const float ny,const char *done) {
++      char cmd[64];
++      snprintf_P(cmd,sizeof(cmd),PSTR("G28O\nM420S0\nG90\nG1Z5F600\nG1X%iY%iF6000\nG1Z0F600"),
++        int(lroundf(LOGICAL_X_POSITION(nx))),int(lroundf(LOGICAL_Y_POSITION(ny))));
++      if(send_gcode(cmd))notice=done;
++    }
++    void probe_accuracy_test() {
++      char cmd[64];   // M48: 10 probes at the plate center; result goes to the status bar
++      snprintf_P(cmd,sizeof(cmd),PSTR("G28O\nM48P10X%iY%i"),
++        int(lroundf(LOGICAL_X_POSITION(Z_SAFE_HOMING_X_POINT))),int(lroundf(LOGICAL_Y_POSITION(Z_SAFE_HOMING_Y_POINT))));
++      if(send_gcode(cmd))notice="Testing - result in status bar";
++    }
++  #endif
++
++  void draw() {
++    using namespace smart_tramming;
++    drawing.clear();
++    #if SMART_MESH_VIEW
++      if (page==Page::Mesh) { draw_mesh(); return; }
++    #endif
++    const bool full = !(page==Page::Dashboard && dashboard_on_screen);
++    dashboard_on_screen = page==Page::Dashboard;
++    if (page==Page::Dashboard) {
++      draw_dashboard(surface,session,selected,view_settings(),full);
++      drawn_revision=session.revision; drawn_stage=session.stage;
++    }
++    else draw_menu(surface,MenuView{selected,notice,smart_tramming::heat_before_level,uint8_t(page==Page::Paper?1:0)});
++    if(drawing.overflow()) {
++      dashboard_on_screen=false;drawing.clear();header("Display update error");text(ink,12,60,"Select Back to leave this page");
++    }
++  }
++}
++
++bool SmartTramming_DrawingPending() { return drawing.pending(); }
++void SmartTramming_RenderTick() {
++  if(checkkey!=SmartTramming){drawing.clear();uncommitted=0;return;}
++  const uint32_t now=millis();
++  if(int32_t(now-next_draw_ms)<0)return;
++  smart_tramming::DrawCommand command;
++  if(!drawing.next(command))return;
++  if(command.kind==smart_tramming::DrawCommand::Text)
++    DWIN_Draw_String(false,font8x16,command.color,bg,command.x0,command.y0,command.label,32);
++  else DWIN_Draw_Rectangle(command.fill?1:0,command.color,command.x0,command.y0,command.x1,command.y1);
++  // No delay()/idle(): return to normal heater servicing and encoder polling.
++  // One small command every 4 ms. 2 ms corrupted the TJC panel on the printer
++  // (garbled fill rectangles), so keep 4 ms and draw fewer commands instead.
++  next_draw_ms=millis()+4;
++  if(++uncommitted>=8||!drawing.pending()){DWIN_UpdateLCD();uncommitted=0;}
++}
++
++void SmartTramming_MenuOpen() {
++  dashboard_on_screen=false;
++  page=Page::Menu; selected=1; notice="Probe the four knob corners"; checkkey=SmartTramming; draw();
++}
++void SmartTramming_Open() {
++  dashboard_on_screen=false;
++  smart_tramming::begin(); page=Page::Dashboard; selected=4; checkkey=SmartTramming; draw();
++}
++void SmartTramming_Update() {
++  using namespace smart_tramming;
++  const EncoderState event=get_encoder_state();
++  const bool turn=event==ENCODER_DIFF_CW||event==ENCODER_DIFF_CCW;
++  const bool enter=event==ENCODER_DIFF_ENTER;
++  if(page==Page::Menu||page==Page::Paper) {
++    constexpr uint8_t count=MENU_ITEMS;
++    if(turn)selected=(selected+(event==ENCODER_DIFF_CW?1:count-1))%count;
++    else if(enter&&page==Page::Menu) {
++      switch(selected) {
++        case 0: SmartTramming_Return(); return;
++        case 1: SmartTramming_Open(); return;
++        case 2:
++          #if SMART_MESH_VIEW
++            SmartMesh_Start();
++          #else
++            checkkey=Leveling;HMI_Leveling();
++          #endif
++          return;
++        case 3:
++          #if SMART_MESH_VIEW
++            SmartMesh_View(); return;
++          #else
++            notice="View Mesh: firmware only"; break;
++          #endif
++        case 4:
++          heat_before_level=!heat_before_level;
++          notice=settings.save()?(heat_before_level?"Heat bed first: ON (saved)":"Heat bed first: OFF (saved)")
++                                :"Changed, but saving failed";
++          break;
++        case 5: page=Page::Paper; selected=1; notice="Pick a knob; Home first if needed"; break;
++        case 6:
++          #if SMART_MESH_VIEW
++            probe_accuracy_test();
++          #else
++            notice="Probe test: firmware only";
++          #endif
++          break;
++      }
++    }
++    else if(enter) {   // Paper Leveling page
++      if(selected==0){end();SmartTramming_MenuOpen();return;}   // knobs may have moved: re-home Z later
++      #if SMART_MESH_VIEW
++        if(selected==1){if(send_gcode("G28"))notice="Homing";}
++        else if(selected<=5){
++          const Point &p=positions[selected-2];
++          paper_move(p.x,p.y,corner_name(selected-2));
++        }
++        else paper_move(Z_SAFE_HOMING_X_POINT,Z_SAFE_HOMING_Y_POINT,"Center");
++      #else
++        notice="Paper move: firmware only";
++      #endif
++    }
++    if(turn||enter)draw();
++    return;
++  }
++  #if SMART_MESH_VIEW
++    if(page==Page::Mesh) {
++      if(!mesh_running&&enter)SmartTramming_MenuOpen();   // Done
++      return;
++    }
++  #endif
++  bool changed=drawn_revision!=session.revision;
++  if(busy()){if(enter)cancel();}
++  else if(turn){
++    const uint8_t previous=selected;
++    selected=selected==4?5:4;   // Only the two buttons are selectable
++    if(!drawing.pending()&&!changed) {
++      drawing.clear();draw_dashboard_selection(surface,session,previous,selected,view_settings());
++      return;
++    }
++    changed=true;
++  }
++  else if(enter) {
++    if(selected==4) request_scan();
++    else {end();SmartTramming_MenuOpen();return;}   // Done/Exit leaves at once; Z re-homed later
++    changed=true;
++  }
++  if(changed||drawn_revision!=session.revision)draw();
++}
++
++#if SMART_MESH_VIEW
++  void SmartMesh_Start() {
++    dashboard_on_screen=false;
++    for(uint8_t x=0;x<MX;x++)for(uint8_t y=0;y<MY;y++)mesh_z[x][y]=NAN;
++    mesh_count=0; mesh_running=true; page=Page::Mesh; checkkey=SmartTramming; draw();
++    if(smart_tramming::heat_before_level) {   // Mesh at printing temperature (PLA preheat bed)
++      char cmd[64];
++      snprintf_P(cmd,sizeof(cmd),PSTR("M190S%i\nG28O\nG29" TERN_(EEPROM_SETTINGS, "\nM500")),int(ui.material_preset[0].bed_temp));
++      queue.inject(cmd);
++    }
++    else queue.inject(F("G28O\nG29" TERN_(EEPROM_SETTINGS, "\nM500")));   // Home if needed, probe, save
++  }
++  void SmartMesh_View() {
++    dashboard_on_screen=false;
++    mesh_load_saved(); mesh_count=MX*MY; mesh_running=false; page=Page::Mesh; checkkey=SmartTramming; draw();
++  }
++  void SmartMesh_Point(const uint8_t x, const uint8_t y, const float z) {
++    if(x>=MX||y>=MY)return;
++    mesh_z[x][y]=z; ++mesh_count;
++    if(checkkey!=SmartTramming||page!=Page::Mesh)return;
++    if(drawing.overflow())return;
++    mesh_cell(x,y); mesh_footer();   // Paced: drawn a little each idle tick while G29 moves
++  }
++  bool SmartMesh_Done() {
++    if(checkkey!=SmartTramming||page!=Page::Mesh||!mesh_running)return false;
++    mesh_running=false; mesh_load_saved(); draw();   // Final grid includes extrapolated edges
++    return true;
++  }
++#endif
++#endif
+diff --git a/Marlin/src/lcd/e3v2/creality/smart_tramming_lcd.h b/Marlin/src/lcd/e3v2/creality/smart_tramming_lcd.h
+new file mode 100644
+index 0000000..b817038
+--- /dev/null
++++ b/Marlin/src/lcd/e3v2/creality/smart_tramming_lcd.h
+@@ -0,0 +1,13 @@
++/** Smart Tramming LCD adapter. SPDX-License-Identifier: GPL-3.0-or-later */
++#pragma once
++void SmartTramming_Open();
++void SmartTramming_MenuOpen();
++void SmartTramming_Update();
++void SmartTramming_RenderTick();
++bool SmartTramming_DrawingPending();
++void SmartTramming_Return();
++// Bed mesh viewer (live during Auto Mesh, or the saved mesh)
++void SmartMesh_Start();
++void SmartMesh_View();
++void SmartMesh_Point(uint8_t x, uint8_t y, float z);
++bool SmartMesh_Done();
+diff --git a/Marlin/src/module/settings.cpp b/Marlin/src/module/settings.cpp
+index a1efd74..a7732aa 100644
+--- a/Marlin/src/module/settings.cpp
++++ b/Marlin/src/module/settings.cpp
+@@ -36,7 +36,7 @@
+  */
+ 
+ // Change EEPROM version if the structure changes
+-#define EEPROM_VERSION "V88"
++#define EEPROM_VERSION "J02" // JNP: J01 new motion defaults; J02 adds the Leveling "Heat bed first" setting
+ #define EEPROM_OFFSET 100
+ 
+ // Check the integrity of data offsets.
+@@ -46,6 +46,10 @@
+ 
+ #include "settings.h"
+ 
++#if ENABLED(SMART_BED_TRAMMING)
++  #include "../feature/smart_tramming.h"
++#endif
++
+ #include "endstops.h"
+ #include "planner.h"
+ #include "stepper.h"
+@@ -598,6 +602,10 @@ typedef struct SettingsDataStruct {
+           shaping_y_zeta;                               // M593 Y D
+   #endif
+ 
++  #if ENABLED(SMART_BED_TRAMMING)
++    bool jnp_heat_before_level;                         // JNP Leveling menu: heat bed first
++  #endif
++
+ } SettingsData;
+ 
+ //static_assert(sizeof(SettingsData) <= MARLIN_EEPROM_SIZE, "EEPROM too small to contain SettingsData!");
+@@ -1668,6 +1676,11 @@ void MarlinSettings::postprocess() {
+       #endif
+     #endif
+ 
++    #if ENABLED(SMART_BED_TRAMMING)
++      _FIELD_TEST(jnp_heat_before_level);
++      EEPROM_WRITE(smart_tramming::heat_before_level);
++    #endif
++
+     //
+     // Report final CRC and Data Size
+     //
+@@ -2723,6 +2736,12 @@ void MarlinSettings::postprocess() {
+       }
+       #endif
+ 
++      #if ENABLED(SMART_BED_TRAMMING)
++        _FIELD_TEST(jnp_heat_before_level);
++        bool stored_heat_before_level;
++        EEPROM_READ_ALWAYS(stored_heat_before_level);
++      #endif
++
+       //
+       // Validate Final Size and CRC
+       //
+@@ -2736,6 +2755,7 @@ void MarlinSettings::postprocess() {
+         break;
+       }
+       else if (!validating) {
++        TERN_(SMART_BED_TRAMMING, smart_tramming::heat_before_level = stored_heat_before_level);
+         DEBUG_ECHO_START();
+         DEBUG_ECHO(version);
+         DEBUG_ECHOLNPGM(" stored settings retrieved (", eeprom_total, " bytes; crc ", working_crc, ")");
+@@ -3031,7 +3051,11 @@ void MarlinSettings::reset() {
+     scara_home_offset.reset();
+   #elif HAS_HOME_OFFSET
+     home_offset.reset();
++    #ifdef JNP_DEFAULT_HOME_OFFSET_X
++      home_offset.x = JNP_DEFAULT_HOME_OFFSET_X;   // JNP: owner's X0 = 2 mm onto the plate
++    #endif
+   #endif
++  TERN_(SMART_BED_TRAMMING, smart_tramming::heat_before_level = false);
+ 
+   TERN_(HAS_HOTEND_OFFSET, reset_hotend_offsets());
+ 
+diff --git a/ini/features.ini b/ini/features.ini
+index efeed37..7da0b56 100644
+--- a/ini/features.ini
++++ b/ini/features.ini
+@@ -160,6 +160,7 @@ HAS_DRIVER_SAFE_POWER_PROTECT          = build_src_filter=+<src/feature/stepper_
+ EXPERIMENTAL_I2CBUS                    = build_src_filter=+<src/feature/twibus.cpp> +<src/gcode/feature/i2c>
+ G26_MESH_VALIDATION                    = build_src_filter=+<src/gcode/bedlevel/G26.cpp>
+ ASSISTED_TRAMMING                      = build_src_filter=+<src/feature/tramming.cpp> +<src/gcode/bedlevel/G35.cpp>
++SMART_BED_TRAMMING                     = build_src_filter=+<src/feature/smart_tramming.cpp> +<src/feature/smart_tramming_view.cpp> +<src/gcode/bedlevel/G36.cpp>
+ HAS_MESH                               = build_src_filter=+<src/gcode/bedlevel/G42.cpp>
+ HAS_LEVELING                           = build_src_filter=+<src/gcode/bedlevel/M420.cpp> +<src/feature/bedlevel/bedlevel.cpp>
+ MECHANICAL_GANTRY_CAL.+                = build_src_filter=+<src/gcode/calibrate/G34.cpp>
+diff --git a/platformio.ini b/platformio.ini
+index e3bdb6f..b119e78 100644
+--- a/platformio.ini
++++ b/platformio.ini
+@@ -13,7 +13,8 @@
+ [platformio]
+ src_dir      = Marlin
+ boards_dir   = buildroot/share/PlatformIO/boards
+-default_envs = mega2560
++; Shared STM32 RC/RE memory candidate. Does not establish GD32 compatibility.
++default_envs = STM32F103RC_creality
+ include_dir  = Marlin
+ extra_configs =
+     Marlin/config.ini
